@@ -1,7 +1,7 @@
 # Личный проект «Кекстаграм» [![Build status][travis-image]][travis-url]
 
 * Студент: [Yuriy Markovich](https://up.htmlacademy.ru/javascript/11/user/212049).
-* Наставник: `Неизвестно`.
+* Наставник: `Владислав Балабанович`.
 
 ---
 
