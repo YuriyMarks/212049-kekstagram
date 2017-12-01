@@ -10,6 +10,7 @@ var photosDescription = [];
 var pictureTemplate = document.querySelector('#picture-template').content;
 var pictureTemplateList = document.querySelector('.pictures');
 var pictureTemplateFirstElement = document.querySelector('.gallery-overlay');
+
 /**
   * Вычисляет случайное целое число из диапазона
   *
@@ -36,7 +37,7 @@ var createArrayOfPhotosDescription = function () {
     var photoDescript = {
       url: 'photos/' + parseInt(i + 1, 10) + '.jpg',
       likes: calcRandomNum(15, 200),
-      comments: COMMENTS[calcRandomNum(0, 5)],
+      comments: COMMENTS[calcRandomNum(0, COMMENTS.length - 1)],
     };
     photosDescription[i] = photoDescript;
   }
@@ -49,8 +50,10 @@ var createArrayOfPhotosDescription = function () {
   * @param {array} arr массив состоящий из 25 сгенерированных JS объектов, которые будут описывать фотографии
   * @param {object} pictureTemplateElement клонированный обьект со сгенерированными параметрами url - адрес картинки, likes - количество лайков, comments - список комментариев
 */
+
+var fragment = document.createDocumentFragment();
+
 var createPhotosList = function (arr) {
-  var fragment = document.createDocumentFragment();
 
   for (var i = 0; i < photosDescription.length; i++) {
     var pictureTemplateElement = pictureTemplate.cloneNode(true);
@@ -59,19 +62,16 @@ var createPhotosList = function (arr) {
     pictureTemplateElement.querySelector('.picture-likes').textContent = arr[i].likes;
     pictureTemplateElement.querySelector('.picture-comments').textContent = arr[i].comments;
 
+    pictureTemplateFirstElement.querySelector('.gallery-overlay-image').src = arr[i].url;
+    pictureTemplateFirstElement.querySelector('.likes-count').textContent = arr[i].likes;
+    pictureTemplateFirstElement.querySelector('.comments-count').textContent = arr[i].comments;
+
     fragment.appendChild(pictureTemplateElement);
   }
   pictureTemplateList.appendChild(fragment);
 
-  pictureTemplateFirstElement.querySelector('.gallery-overlay-image').src = arr[0].url;
-  pictureTemplateFirstElement.querySelector('.likes-count').textContent = arr[0].likes;
-  pictureTemplateFirstElement.querySelector('.comments-count').textContent = arr[0].comments;
-
-  fragment.appendChild(pictureTemplateElement);
-  pictureTemplateFirstElement.appendChild(fragment);
+  document.querySelector('.pictures').classList.remove('hidden');
+  // document.querySelector('.gallery-overlay').classList.remove('hidden');
 };
-
-document.querySelector('.pictures').classList.remove('hidden');
-document.querySelector('.gallery-overlay').classList.remove('hidden');
 
 createArrayOfPhotosDescription();
