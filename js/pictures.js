@@ -9,7 +9,8 @@ var COMMENTS = ['Всё отлично!',
 var photosDescription = [];
 var pictureTemplate = document.querySelector('#picture-template').content;
 var pictureTemplateList = document.querySelector('.pictures');
-var pictureTemplateFirstElement = document.querySelector('.gallery-overlay');
+var ENTER_KEYCODE = 13;
+var ESC_KEYCODE = 27;
 
 /**
   * Вычисляет случайное целое число из диапазона
@@ -50,7 +51,6 @@ var createArrayOfPhotosDescription = function () {
   * @param {array} arr массив состоящий из 25 сгенерированных JS объектов, которые будут описывать фотографии
   * @param {object} pictureTemplateElement клонированный обьект со сгенерированными параметрами url - адрес картинки, likes - количество лайков, comments - список комментариев
 */
-
 var fragment = document.createDocumentFragment();
 
 var createPhotosList = function (arr) {
@@ -62,16 +62,59 @@ var createPhotosList = function (arr) {
     pictureTemplateElement.querySelector('.picture-likes').textContent = arr[i].likes;
     pictureTemplateElement.querySelector('.picture-comments').textContent = arr[i].comments;
 
-    pictureTemplateFirstElement.querySelector('.gallery-overlay-image').src = arr[i].url;
-    pictureTemplateFirstElement.querySelector('.likes-count').textContent = arr[i].likes;
-    pictureTemplateFirstElement.querySelector('.comments-count').textContent = arr[i].comments;
-
     fragment.appendChild(pictureTemplateElement);
   }
   pictureTemplateList.appendChild(fragment);
 
   document.querySelector('.pictures').classList.remove('hidden');
-  // document.querySelector('.gallery-overlay').classList.remove('hidden');
 };
 
 createArrayOfPhotosDescription();
+
+/**
+  * При нажатии на любой из элементов .picture отрисовывает элемент .gallery-overlay с подробным описанием картинки
+  *
+  * @param {object} evt обьект .picture
+*/
+var pictureClickHandler = function (evt) {
+  evt.preventDefault();
+  document.querySelector('.gallery-overlay-image').src = this.querySelector('img').src;
+  document.querySelector('.likes-count').textContent = this.querySelector('.picture-likes').textContent;
+  document.querySelector('.comments-count').textContent = this.querySelector('.picture-comments').textContent;
+  document.querySelector('.gallery-overlay').classList.remove('hidden')
+};
+
+/**
+  * При нажатии на элемент .gallery-overlay-close либо при нажатии клавиши ESC скрывает элемент .gallery-overlay
+*/
+var closePicture = function() {
+  document.querySelector('.gallery-overlay').classList.add('hidden');
+};
+
+/**
+  * Добавляет обработчик события 'click' на все элементы .picture
+  *
+  * @param {array} pictures массив содержащий все фотографии - обьекты .picture
+*/
+var addEventHandler = function () {
+  var pictures = document.querySelectorAll('.picture');
+  for (var i = 0; i < pictures.length; i++) {
+      pictures[i].addEventListener('click', pictureClickHandler);
+  }
+};
+
+document.querySelector('.gallery-overlay-close').addEventListener('click', closePicture);
+
+document.querySelector('.gallery-overlay-close').addEventListener('keydown', function(evt){
+  if (evt.keyCode === ENTER_KEYCODE) {
+    closePicture(evt);
+  }
+});
+
+document.addEventListener('keydown', function(evt){
+  if (evt.keyCode === ESC_KEYCODE){
+    closePicture(evt);
+  }
+});
+
+addEventHandler();
