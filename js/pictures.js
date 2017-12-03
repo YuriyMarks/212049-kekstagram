@@ -1,16 +1,16 @@
 'use strict';
 
-var COMMENTS = ['Всё отлично!',
+var comments = ['Всё отлично!',
   'В целом всё неплохо. Но не всё.',
   'Когда вы делаете фотографию, хорошо бы убирать палец из кадра. В конце концов это просто непрофессионально.',
   'Моя бабушка случайно чихнула с фотоаппаратом в руках и у неё получилась фотография лучше.',
   'Я поскользнулся на банановой кожуре и уронил фотоаппарат на кота и у меня получилась фотография лучше.',
   'Лица у людей на фотке перекошены, как будто их избивают. Как можно было поймать такой неудачный момент?!'];
-var photosDescription = [];
 var pictureTemplate = document.querySelector('#picture-template').content;
 var pictureTemplateList = document.querySelector('.pictures');
 var ENTER_KEYCODE = 13;
 var ESC_KEYCODE = 27;
+var photosArraySize = 25;
 
 /**
   * Вычисляет случайное целое число из диапазона
@@ -26,36 +26,43 @@ var calcRandomNum = function (min, max) {
 };
 
 /**
-  * Добавляет в массив 25 сгенерированных JS объектов, которые будут описывать фотографии, размещенные другими пользователями
+  * Конкатенирует url фотографии
   *
-  * @param {string} url строка — адрес картинки
-  * @param {number} likes число — количество лайков, поставленных фотографии. Случайное число от 15 до 200
-  * @param {string} comments массив строк — список комментариев, оставленных другими пользователями к этой фотографии
-  * @param {object} photoDescript сгенерированный обьект описывающий фотографию
+  * @param {number} i переменная цикла
+  * @return {string} photoUrl url фотографии
 */
-var createArrayOfPhotosDescription = function () {
-  for (var i = 0; i < 25; i++) {
-    var photoDescript = {
-      url: 'photos/' + parseInt(i + 1, 10) + '.jpg',
-      likes: calcRandomNum(15, 200),
-      comments: COMMENTS[calcRandomNum(0, COMMENTS.length - 1)],
-    };
-    photosDescription[i] = photoDescript;
-  }
-  createPhotosList(photosDescription);
+var createUrl = function (i) {
+  var photoUrl = 'photos/' + parseInt(i + 1, 10) + '.jpg';
+
+  return photoUrl;
 };
 
 /**
-  * Клонирует обьекты из template и отрисовывает сгенерированные DOM-элементы в блок .pictures, для вставки элементов использует DocumentFragment
-  *
-  * @param {array} arr массив состоящий из 25 сгенерированных JS объектов, которые будут описывать фотографии
-  * @param {object} pictureTemplateElement клонированный обьект со сгенерированными параметрами url - адрес картинки, likes - количество лайков, comments - список комментариев
+  * Добавляет в массив сгенерированные JS объекты, которые будут описывать фотографии, размещенные другими пользователями
 */
-var fragment = document.createDocumentFragment();
+var createArrayOfPhotosDescription = function () {
+  var photosDescription = [];
 
-var createPhotosList = function (arr) {
+  for (var i = 0; i < photosArraySize; i++) {
+    var photoDescript = {
+      url: createUrl(i),
+      likes: calcRandomNum(15, 200),
+      comments: comments[calcRandomNum(0, comments.length - 1)],
+    };
+    photosDescription[i] = photoDescript;
+  }
+  createPhotoElement(photosDescription);
+};
 
-  for (var i = 0; i < photosDescription.length; i++) {
+/**
+  * Клонирует обьект из template подставляет значения url и описание картинки и сохраняет во fragment
+  *
+  * @param {array} arr массив фотографий photosDescription
+*/
+var createPhotoElement = function (arr) {
+  var fragment = document.createDocumentFragment();
+
+  for (var i = 0; i < arr.length; i++) {
     var pictureTemplateElement = pictureTemplate.cloneNode(true);
 
     pictureTemplateElement.querySelector('.picture img').src = arr[i].url;
@@ -64,6 +71,15 @@ var createPhotosList = function (arr) {
 
     fragment.appendChild(pictureTemplateElement);
   }
+  createPhotosList(fragment);
+};
+
+/**
+  * Отрисовывает сгенерированные DOM-элементы в блок .pictures
+  *
+  * @param {array} fragment массив фотографий photosDescription
+*/
+var createPhotosList = function (fragment) {
   pictureTemplateList.appendChild(fragment);
 
   document.querySelector('.pictures').classList.remove('hidden');
@@ -78,9 +94,12 @@ createArrayOfPhotosDescription();
 */
 var pictureClickHandler = function (evt) {
   evt.preventDefault();
-  document.querySelector('.gallery-overlay-image').src = this.querySelector('img').src;
-  document.querySelector('.likes-count').textContent = this.querySelector('.picture-likes').textContent;
-  document.querySelector('.comments-count').textContent = this.querySelector('.picture-comments').textContent;
+
+  var temp = evt.target.parentNode;
+
+  document.querySelector('.gallery-overlay-image').src = temp.querySelector('img').src;
+  document.querySelector('.likes-count').textContent = temp.querySelector('.picture-likes').textContent;
+  document.querySelector('.comments-count').textContent = temp.querySelector('.picture-comments').textContent;
   document.querySelector('.gallery-overlay').classList.remove('hidden')
 };
 
@@ -93,13 +112,11 @@ var closePicture = function() {
 
 /**
   * Добавляет обработчик события 'click' на все элементы .picture
-  *
-  * @param {array} pictures массив содержащий все фотографии - обьекты .picture
 */
 var addEventHandler = function () {
   var pictures = document.querySelectorAll('.picture');
   for (var i = 0; i < pictures.length; i++) {
-      pictures[i].addEventListener('click', pictureClickHandler);
+    pictures[i].addEventListener('click', pictureClickHandler);
   }
 };
 
