@@ -255,3 +255,5 @@ var unzoom = function () {
 document.querySelector('.upload-resize-controls-button-inc').addEventListener('click', zoom);
 
 document.querySelector('.upload-resize-controls-button-dec').addEventListener('click', unzoom);
+
+
