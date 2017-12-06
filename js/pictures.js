@@ -1,5 +1,7 @@
 'use strict';
 
+// Отрисовка галереи картинок. Показ/скрытие картинки в галерее.
+
 var comments = ['Всё отлично!',
   'В целом всё неплохо. Но не всё.',
   'Когда вы делаете фотографию, хорошо бы убирать палец из кадра. В конце концов это просто непрофессионально.',
@@ -80,12 +82,15 @@ var createPhotoElement = function (arr) {
   * @param {array} fragment массив фотографий photosDescription
 */
 var createPhotosList = function (fragment) {
-  pictureTemplateList.appendChild(fragment);
+  var pictures =  document.querySelector('.pictures');
 
-  document.querySelector('.pictures').classList.remove('hidden');
+  pictureTemplateList.appendChild(fragment);
+  pictures.classList.remove('hidden');
 };
 
 createArrayOfPhotosDescription();
+
+// Показ/скрытие формы кадрирования
 
 /**
   * При нажатии на любой из элементов .picture отрисовывает элемент .gallery-overlay с подробным описанием картинки
@@ -96,19 +101,31 @@ var pictureClickHandler = function (evt) {
   evt.preventDefault();
 
   var temp = evt.currentTarget;
+  var galeryOverlayImage = document.querySelector('.gallery-overlay-image');
+  var likesCount = document.querySelector('.likes-count');
+  var commentsCount = document.querySelector('.comments-count');
+  var galeryOverlay = document.querySelector('.gallery-overlay');
 
-  document.querySelector('.gallery-overlay-image').src = temp.querySelector('img').src;
-  document.querySelector('.likes-count').textContent = temp.querySelector('.picture-likes').textContent;
-  document.querySelector('.comments-count').textContent = temp.querySelector('.picture-comments').textContent;
-  document.querySelector('.gallery-overlay').classList.remove('hidden')
+  galeryOverlayImage.src = temp.querySelector('img').src;
+  likesCount.textContent = temp.querySelector('.picture-likes').textContent;
+  commentsCount.textContent = temp.querySelector('.picture-comments').textContent;
+  galeryOverlay.classList.remove('hidden');
 };
 
 /**
-  * При нажатии на элементы .gallery-overlay-close, .upload-overlay либо при нажатии клавиши ESC скрывает элемент .gallery-overlay
+  * При нажатии на элементы .gallery-overlay-close, либо при нажатии клавиши ESC скрывает элемент .gallery-overlay
 */
-var closePicture = function () {
-  document.querySelector('.gallery-overlay').classList.add('hidden');
-  document.querySelector('.upload-overlay').classList.add('hidden');
+var closeGalleryOverlay = function () {
+  var galeryOverlay = document.querySelector('.gallery-overlay');
+  galeryOverlay.classList.add('hidden');
+};
+
+/**
+  * При нажатии на элементы .upload-overlay либо при нажатии клавиши ESC скрывает элемент .upload-overlay
+*/
+var closeUploadOverlay = function () {
+  var uploadFunction = document.querySelector('.upload-overlay');
+  uploadFunction.classList.add('hidden');
 };
 
 /**
@@ -121,33 +138,46 @@ var addEventHandler = function () {
   }
 };
 
-document.querySelector('.gallery-overlay-close').addEventListener('click', closePicture);
+var onClickGaleryOverlayClose = document.querySelector('.gallery-overlay-close');
+onClickGaleryOverlayClose.addEventListener('click', closeGalleryOverlay);
 
-document.querySelector('.upload-form-cancel').addEventListener('click', closePicture);
+var onClickUploadFormClose = document.querySelector('.upload-form-cancel');
+onClickUploadFormClose.addEventListener('click', closeUploadOverlay);
 
-document.querySelector('.gallery-overlay-close').addEventListener('keydown', function(evt){
+var onEnterGaleryOverlayClose = document.querySelector('.gallery-overlay-close');
+onEnterGaleryOverlayClose.addEventListener('keydown', function(evt){
   if (evt.keyCode === ENTER_KEYCODE) {
-    closePicture(evt);
+    closeGalleryOverlay(evt);
   }
 });
 
-document.querySelector('.upload-form-cancel').addEventListener('keydown', function(evt){
+var onEnterUploadFormClose = document.querySelector('.upload-form-cancel');
+onEnterUploadFormClose.addEventListener('keydown', function(evt){
   if (evt.keyCode === ENTER_KEYCODE) {
-    closePicture(evt);
+    closeUploadOverlay(evt);
   }
 });
 
-document.addEventListener('keydown', function(evt){
+var formDescription = document.querySelector('.upload-form-description');
+
+var onEscClose = document.addEventListener('keydown', function(evt){
   if (evt.keyCode === ESC_KEYCODE){
-    closePicture(evt);
+    if (document.activeElement != formDescription) {
+      closeGalleryOverlay(evt);
+      closeUploadOverlay(evt);
+    }
   }
 });
 
 addEventHandler();
 
-document.querySelector('#upload-file').addEventListener('change', function(){
-  document.querySelector('.upload-overlay').classList.remove('hidden');
-});
+var openUploadOverlay = function () {
+  var uploadOverlay = document.querySelector('.upload-overlay');
+  uploadOverlay.classList.remove('hidden');
+}
+
+var uploadForm = document.querySelector('#upload-file');
+uploadForm.addEventListener('change', openUploadOverlay);
 
 /**
   * Удаляет у обьекта .effect-image-preview все классы соответствующие фильтрам
@@ -203,8 +233,9 @@ createPhotosPreviewArray();
   *
   * @param {number} zoomValueNumber значение атрибута value обьекта .upload-resize-controls-value
 */
-var scalePicture = function (zoomValueNumber) {
-  var styleTransform = document.querySelector('.effect-image-preview').style.transform = 'scale('+zoomValueNumber+')';
+var changeScalePicture = function (zoomValueNumber) {
+  var styleTransform = document.querySelector('.effect-image-preview');
+  styleTransform.style.transform = 'scale('+zoomValueNumber+')';
 
   changeZoomValue(zoomValueNumber * 100 + '%');
 };
@@ -215,7 +246,8 @@ var scalePicture = function (zoomValueNumber) {
   * @param {number} value значение атрибута value в процентах
 */
 var changeZoomValue = function (value) {
-  document.querySelector('.upload-resize-controls-value').value = value;
+  var atributeValue = document.querySelector('.upload-resize-controls-value');
+  atributeValue.value = value;
 };
 
 /**
@@ -228,10 +260,10 @@ var zoom = function () {
   var maxZoom = 100;
 
   if (zoomValueNumber === maxZoom) {
-    scalePicture(1);
+    changeScalePicture(1);
   }  else {
      zoomValueNumber = (zoomValueNumber + zoomStep) / 100;
-     scalePicture(zoomValueNumber);
+     changeScalePicture(zoomValueNumber);
   }
 };
 
@@ -245,14 +277,15 @@ var unzoom = function () {
   var minZoom = 25;
 
   if (zoomValueNumber === minZoom) {
-    scalePicture(0.25);
+    changeScalePicture(0.25);
   }  else {
      zoomValueNumber = (zoomValueNumber - zoomStep) / 100;
-     scalePicture(zoomValueNumber);
+     changeScalePicture(zoomValueNumber);
   }
 };
 
-document.querySelector('.upload-resize-controls-button-inc').addEventListener('click', zoom);
+var pictureScaleIncrease = document.querySelector('.upload-resize-controls-button-inc');
+pictureScaleIncrease.addEventListener('click', zoom);
 
-document.querySelector('.upload-resize-controls-button-dec').addEventListener('click', unzoom);
-
+var pictureScaleDecrease = document.querySelector('.upload-resize-controls-button-dec');
+pictureScaleDecrease.addEventListener('click', unzoom);
