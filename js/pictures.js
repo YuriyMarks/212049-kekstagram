@@ -1,6 +1,6 @@
 'use strict';
 
-// Отрисовка галереи картинок. Показ/скрытие картинки в галерее.
+// Отрисовка галереи картинок.
 
 var comments = ['Всё отлично!',
   'В целом всё неплохо. Но не всё.',
@@ -90,7 +90,9 @@ var createPhotosList = function (fragment) {
 
 createArrayOfPhotosDescription();
 
-// Показ/скрытие формы кадрирования
+// Показ/скрытие картинки в галерее.
+
+var galeryOverlayClose = document.querySelector('.gallery-overlay-close');
 
 /**
   * При нажатии на любой из элементов .picture отрисовывает элемент .gallery-overlay с подробным описанием картинки
@@ -113,22 +115,6 @@ var pictureClickHandler = function (evt) {
 };
 
 /**
-  * При нажатии на элементы .gallery-overlay-close, либо при нажатии клавиши ESC скрывает элемент .gallery-overlay
-*/
-var closeGalleryOverlay = function () {
-  var galeryOverlay = document.querySelector('.gallery-overlay');
-  galeryOverlay.classList.add('hidden');
-};
-
-/**
-  * При нажатии на элементы .upload-overlay либо при нажатии клавиши ESC скрывает элемент .upload-overlay
-*/
-var closeUploadOverlay = function () {
-  var uploadFunction = document.querySelector('.upload-overlay');
-  uploadFunction.classList.add('hidden');
-};
-
-/**
   * Добавляет обработчик события 'click' на все элементы .picture
 */
 var addEventHandler = function () {
@@ -138,41 +124,45 @@ var addEventHandler = function () {
   }
 };
 
-var onClickGaleryOverlayClose = document.querySelector('.gallery-overlay-close');
-onClickGaleryOverlayClose.addEventListener('click', closeGalleryOverlay);
+/**
+  * При нажатии на элементы .gallery-overlay-close, либо при нажатии клавиши ESC скрывает элемент .gallery-overlay
+*/
+var closeGalleryOverlay = function () {
+  var galeryOverlay = document.querySelector('.gallery-overlay');
+  galeryOverlay.classList.add('hidden');
+};
 
-var onClickUploadFormClose = document.querySelector('.upload-form-cancel');
-onClickUploadFormClose.addEventListener('click', closeUploadOverlay);
-
-var onEnterGaleryOverlayClose = document.querySelector('.gallery-overlay-close');
-onEnterGaleryOverlayClose.addEventListener('keydown', function(evt){
+galeryOverlayClose.addEventListener('click', closeGalleryOverlay);
+galeryOverlayClose.addEventListener('keydown', function(evt){
   if (evt.keyCode === ENTER_KEYCODE) {
     closeGalleryOverlay(evt);
   }
 });
 
-var onEnterUploadFormClose = document.querySelector('.upload-form-cancel');
-onEnterUploadFormClose.addEventListener('keydown', function(evt){
-  if (evt.keyCode === ENTER_KEYCODE) {
-    closeUploadOverlay(evt);
-  }
-});
-
-var formDescription = document.querySelector('.upload-form-description');
-
 var onEscClose = document.addEventListener('keydown', function(evt){
   if (evt.keyCode === ESC_KEYCODE){
     if (document.activeElement != formDescription) {
       closeGalleryOverlay(evt);
-      closeUploadOverlay(evt);
     }
   }
 });
 
 addEventHandler();
 
+// Показ/скрытие формы кадрирования
+
+var formDescription = document.querySelector('.upload-form-description');
+var previewImage = document.querySelector('.effect-image-preview');
+var uploadOverlay = document.querySelector('.upload-overlay');
+var uploadFormClose = document.querySelector('.upload-form-cancel');
+var zoomStep = 25;
+var maxZoom = 100;
+var minZoom = 25;
+
+/**
+  * При изменении значения поля загрузки фотографии показывает форму кадрирования (элемент .upload-overlay)
+*/
 var openUploadOverlay = function () {
-  var uploadOverlay = document.querySelector('.upload-overlay');
   uploadOverlay.classList.remove('hidden');
 }
 
@@ -180,16 +170,36 @@ var uploadForm = document.querySelector('#upload-file');
 uploadForm.addEventListener('change', openUploadOverlay);
 
 /**
+  * При клике (нажатии enter) на элементе .upload-form-cancel либо при нажатии клавиши ESC скрывает форму кадрирования (элемент .upload-overlay)
+*/
+var closeUploadOverlay = function () {
+  uploadOverlay.classList.add('hidden');
+};
+
+uploadFormClose.addEventListener('click', closeUploadOverlay);
+uploadFormClose.addEventListener('keydown', function(evt){
+  if (evt.keyCode === ENTER_KEYCODE) {
+    closeUploadOverlay(evt);
+  }
+});
+
+var onEscUploadFormClose = document.addEventListener('keydown', function(evt){
+  if (evt.keyCode === ESC_KEYCODE){
+    if (document.activeElement != formDescription) {
+      closeUploadOverlay(evt);
+    }
+  }
+});
+
+/**
   * Удаляет у обьекта .effect-image-preview все классы соответствующие фильтрам
 */
-var removeClass = function () {
-  var rmvClass = document.querySelector('.effect-image-preview');
-
-  rmvClass.classList.remove('effect-chrome');
-  rmvClass.classList.remove('effect-sepia');
-  rmvClass.classList.remove('effect-marvin');
-  rmvClass.classList.remove('effect-phobos');
-  rmvClass.classList.remove('effect-heat');
+var removeFilterClass = function () {
+  previewImage.classList.remove('effect-chrome');
+  previewImage.classList.remove('effect-sepia');
+  previewImage.classList.remove('effect-marvin');
+  previewImage.classList.remove('effect-phobos');
+  previewImage.classList.remove('effect-heat');
 };
 
 /**
@@ -198,20 +208,18 @@ var removeClass = function () {
   * @param {object} evt обьект .upload-effect-label
 */
 var changeFilter = function (evt) {
-  var addClass = document.querySelector('.effect-image-preview');
-
-  removeClass();
+  removeFilterClass();
 
   if (evt.currentTarget.classList.contains('upload-effect-label-chrome')) {
-      addClass.classList.add('effect-chrome');
+      previewImage.classList.add('effect-chrome');
   } else if (evt.currentTarget.classList.contains('upload-effect-label-sepia')) {
-    addClass.classList.add('effect-sepia');
+    previewImage.classList.add('effect-sepia');
   } else if (evt.currentTarget.classList.contains('upload-effect-label-marvin')) {
-    addClass.classList.add('effect-marvin');
+    previewImage.classList.add('effect-marvin');
   } else if (evt.currentTarget.classList.contains('upload-effect-label-phobos')) {
-    addClass.classList.add('effect-phobos');
+    previewImage.classList.add('effect-phobos');
   } else if (evt.currentTarget.classList.contains('upload-effect-label-heat')) {
-    addClass.classList.add('effect-heat');
+    previewImage.classList.add('effect-heat');
   }
 };
 
@@ -219,10 +227,10 @@ var changeFilter = function (evt) {
   * Проходится по массиву с фильтрами и добавляет обработчик события по клику
 */
 var createPhotosPreviewArray = function () {
-  var previwPhotos = document.querySelectorAll('.upload-effect-controls .upload-effect-label');
+  var filtersPreview = document.querySelectorAll('.upload-effect-controls .upload-effect-label');
 
-  for (var i = 0; i < previwPhotos.length; i++) {
-    previwPhotos[i].addEventListener('click', changeFilter);
+  for (var i = 0; i < filtersPreview.length; i++) {
+    filtersPreview[i].addEventListener('click', changeFilter);
   }
 };
 
@@ -256,8 +264,6 @@ var changeZoomValue = function (value) {
 var zoom = function () {
   var zoomValue = document.querySelector('.upload-resize-controls-value').value;
   var zoomValueNumber = parseInt(zoomValue, 10);
-  var zoomStep = 25;
-  var maxZoom = 100;
 
   if (zoomValueNumber === maxZoom) {
     changeScalePicture(1);
@@ -273,8 +279,6 @@ var zoom = function () {
 var unzoom = function () {
   var zoomValue = document.querySelector('.upload-resize-controls-value').value;
   var zoomValueNumber = parseInt(zoomValue, 10);
-  var zoomStep = 25;
-  var minZoom = 25;
 
   if (zoomValueNumber === minZoom) {
     changeScalePicture(0.25);
