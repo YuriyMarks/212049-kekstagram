@@ -31,7 +31,7 @@ var calcRandomNum = function (min, max) {
   * Конкатенирует url фотографии
   *
   * @param {number} i переменная цикла
-  * @return {string} photoUrl url фотографии
+  * @return {string} photoUrl возвращает url фотографии
 */
 var createUrl = function (i) {
   var photoUrl = 'photos/' + parseInt(i + 1, 10) + '.jpg';
@@ -40,7 +40,8 @@ var createUrl = function (i) {
 };
 
 /**
-  * Добавляет в массив сгенерированные JS объекты, которые будут описывать фотографии, размещенные другими пользователями
+  * Добавляет в массив сгенерированные JS объекты, которые
+  * будут описывать фотографии, размещенные другими пользователями
 */
 var createArrayOfPhotosDescription = function () {
   var photosDescription = [];
@@ -57,7 +58,8 @@ var createArrayOfPhotosDescription = function () {
 };
 
 /**
-  * Клонирует обьект из template подставляет значения url и описание картинки и сохраняет во fragment
+  * Клонирует обьект из template подставляет значения url и описание
+  * картинки и сохраняет во fragment
   *
   * @param {array} arr массив фотографий photosDescription
 */
@@ -92,10 +94,12 @@ createArrayOfPhotosDescription();
 
 // Показ/скрытие картинки в галерее.
 
+var galeryOverlay = document.querySelector('.gallery-overlay');
 var galeryOverlayClose = document.querySelector('.gallery-overlay-close');
 
 /**
-  * При нажатии на любой из элементов .picture отрисовывает элемент .gallery-overlay с подробным описанием картинки
+  * При нажатии на любой из элементов .picture отрисовывает элемент
+  * .gallery-overlay с подробным описанием картинки
   *
   * @param {object} evt обьект .picture
 */
@@ -106,7 +110,6 @@ var pictureClickHandler = function (evt) {
   var galeryOverlayImage = document.querySelector('.gallery-overlay-image');
   var likesCount = document.querySelector('.likes-count');
   var commentsCount = document.querySelector('.comments-count');
-  var galeryOverlay = document.querySelector('.gallery-overlay');
 
   galeryOverlayImage.src = temp.querySelector('img').src;
   likesCount.textContent = temp.querySelector('.picture-likes').textContent;
@@ -122,124 +125,111 @@ var addEventHandler = function () {
   for (var i = 0; i < pictures.length; i++) {
     pictures[i].addEventListener('click', pictureClickHandler);
   }
+  galeryOverlayClose.addEventListener('click', closeGalleryOverlay);
+  galeryOverlayClose.addEventListener('keydown', onGalleryOverlayEnterPress);
+  document.addEventListener('keydown', onGalleryOverlayEscPress);
 };
 
 /**
-  * При нажатии на элементы .gallery-overlay-close, либо при нажатии клавиши ESC скрывает элемент .gallery-overlay
+  * При клике на элемент .gallery-overlay-close скрывает элемент .gallery-overlay
 */
 var closeGalleryOverlay = function () {
-  var galeryOverlay = document.querySelector('.gallery-overlay');
   galeryOverlay.classList.add('hidden');
 };
 
-galeryOverlayClose.addEventListener('click', closeGalleryOverlay);
-galeryOverlayClose.addEventListener('keydown', function(evt){
-  if (evt.keyCode === ENTER_KEYCODE) {
-    closeGalleryOverlay(evt);
+/**
+  * При фокусировке на обьекте .gallery-overlay-close и нажатии клавиши
+  * enter скрывает картинку .gallery-overlay
+*/
+var onGalleryOverlayEnterPress = function (evt) {
+  if (evt.keyCode === ENTER_KEYCODE){
+      closeGalleryOverlay();
   }
-});
+};
 
-var onEscClose = document.addEventListener('keydown', function(evt){
+/**
+  * При нажатии клавиши esc скрывает картинку .gallery-overlay
+*/
+var onGalleryOverlayEscPress = function (evt) {
   if (evt.keyCode === ESC_KEYCODE){
     if (document.activeElement != formDescription) {
-      closeGalleryOverlay(evt);
+      closeGalleryOverlay();
     }
   }
-});
+};
 
 addEventHandler();
 
 // Показ/скрытие формы кадрирования
 
 var formDescription = document.querySelector('.upload-form-description');
-var previewImage = document.querySelector('.effect-image-preview');
+var uploadForm = document.querySelector('#upload-file');
 var uploadOverlay = document.querySelector('.upload-overlay');
+var previewImage = uploadOverlay.querySelector('.effect-image-preview');
 var uploadFormClose = document.querySelector('.upload-form-cancel');
+var uploadEffectControls = document.querySelector('.upload-effect-controls');
+var pictureScaleIncrease = document.querySelector('.upload-resize-controls-button-inc');
+var pictureScaleDecrease = document.querySelector('.upload-resize-controls-button-dec');
+var currentEffectName;
 var zoomStep = 25;
 var maxZoom = 100;
 var minZoom = 25;
 
 /**
-  * При изменении значения поля загрузки фотографии показывает форму кадрирования (элемент .upload-overlay)
+  * При изменении значения поля загрузки фотографии показывает
+  * форму кадрирования (элемент .upload-overlay)
 */
 var openUploadOverlay = function () {
   uploadOverlay.classList.remove('hidden');
+  uploadFormClose.addEventListener('click', closeUploadOverlay);
+  document.addEventListener('keydown', onUploadOverlayEscPress);
 }
 
-var uploadForm = document.querySelector('#upload-file');
-uploadForm.addEventListener('change', openUploadOverlay);
-
 /**
-  * При клике (нажатии enter) на элементе .upload-form-cancel либо при нажатии клавиши ESC скрывает форму кадрирования (элемент .upload-overlay)
+  * При клике скрывает форму кадрирования (элемент .upload-overlay)
 */
 var closeUploadOverlay = function () {
   uploadOverlay.classList.add('hidden');
+  uploadFormClose.removeEventListener('click', closeUploadOverlay);
+  document.removeEventListener('keydown', onUploadOverlayEscPress);
 };
 
-uploadFormClose.addEventListener('click', closeUploadOverlay);
-uploadFormClose.addEventListener('keydown', function(evt){
-  if (evt.keyCode === ENTER_KEYCODE) {
-    closeUploadOverlay(evt);
-  }
-});
-
-var onEscUploadFormClose = document.addEventListener('keydown', function(evt){
+/**
+  * При нажатии клавиши esc скрывает форму кадрирования (элемент .upload-overlay)
+*/
+var onUploadOverlayEscPress = function (evt) {
   if (evt.keyCode === ESC_KEYCODE){
     if (document.activeElement != formDescription) {
       closeUploadOverlay(evt);
     }
   }
-});
-
-/**
-  * Удаляет у обьекта .effect-image-preview все классы соответствующие фильтрам
-*/
-var removeFilterClass = function () {
-  previewImage.classList.remove('effect-chrome');
-  previewImage.classList.remove('effect-sepia');
-  previewImage.classList.remove('effect-marvin');
-  previewImage.classList.remove('effect-phobos');
-  previewImage.classList.remove('effect-heat');
 };
+
+uploadForm.addEventListener('change', openUploadOverlay);
 
 /**
   * Добавляет картинке .effect-image-preview CSS-класс, соответствующий фильтру
   *
   * @param {object} evt обьект .upload-effect-label
 */
-var changeFilter = function (evt) {
-  removeFilterClass();
-
-  if (evt.currentTarget.classList.contains('upload-effect-label-chrome')) {
-      previewImage.classList.add('effect-chrome');
-  } else if (evt.currentTarget.classList.contains('upload-effect-label-sepia')) {
-    previewImage.classList.add('effect-sepia');
-  } else if (evt.currentTarget.classList.contains('upload-effect-label-marvin')) {
-    previewImage.classList.add('effect-marvin');
-  } else if (evt.currentTarget.classList.contains('upload-effect-label-phobos')) {
-    previewImage.classList.add('effect-phobos');
-  } else if (evt.currentTarget.classList.contains('upload-effect-label-heat')) {
-    previewImage.classList.add('effect-heat');
+var addFilterToImage = function (evt) {
+  if (evt.target.tagName === 'INPUT') {
+    var currentEffectControl = evt.target.value;
+    if (previewImage.classList.contains(currentEffectName)) {
+      previewImage.classList.remove(currentEffectName);
+    }
+    currentEffectName = 'effect-' + currentEffectControl;
+    previewImage.classList.add(currentEffectName);
   }
 };
 
-/**
-  * Проходится по массиву с фильтрами и добавляет обработчик события по клику
-*/
-var createPhotosPreviewArray = function () {
-  var filtersPreview = document.querySelectorAll('.upload-effect-controls .upload-effect-label');
-
-  for (var i = 0; i < filtersPreview.length; i++) {
-    filtersPreview[i].addEventListener('click', changeFilter);
-  }
-};
-
-createPhotosPreviewArray();
+uploadEffectControls.addEventListener('click', addFilterToImage);
 
 /**
   * Изменяет масштаб изображения .effect-image-preview
   *
-  * @param {number} zoomValueNumber значение атрибута value обьекта .upload-resize-controls-value
+  * @param {number} zoomValueNumber значение атрибута value обьекта
+  * .upload-resize-controls-value
 */
 var changeScalePicture = function (zoomValueNumber) {
   var styleTransform = document.querySelector('.effect-image-preview');
@@ -259,37 +249,32 @@ var changeZoomValue = function (value) {
 };
 
 /**
-  * При нажатии на кнопку масштабирования увеличивает значение масштаба zoomValueNumber с шагом в 25
+  * При нажатии на кнопку масштабирования увеличивает значение
+  * масштаба zoomValueNumber с шагом в 25
 */
 var zoom = function () {
   var zoomValue = document.querySelector('.upload-resize-controls-value').value;
   var zoomValueNumber = parseInt(zoomValue, 10);
 
-  if (zoomValueNumber === maxZoom) {
-    changeScalePicture(1);
-  }  else {
-     zoomValueNumber = (zoomValueNumber + zoomStep) / 100;
-     changeScalePicture(zoomValueNumber);
+  if (zoomValueNumber !== maxZoom) {
+   zoomValueNumber = (zoomValueNumber + zoomStep) / 100;
+   changeScalePicture(zoomValueNumber);
   }
 };
 
 /**
-  * При нажатии на кнопку масштабирования уменьшает значение масштаба zoomValueNumber с шагом в 25
+  * При нажатии на кнопку масштабирования уменьшает значение
+  * масштаба zoomValueNumber с шагом в 25
 */
 var unzoom = function () {
   var zoomValue = document.querySelector('.upload-resize-controls-value').value;
   var zoomValueNumber = parseInt(zoomValue, 10);
 
-  if (zoomValueNumber === minZoom) {
-    changeScalePicture(0.25);
-  }  else {
-     zoomValueNumber = (zoomValueNumber - zoomStep) / 100;
-     changeScalePicture(zoomValueNumber);
+  if (zoomValueNumber !== minZoom) {
+    zoomValueNumber = (zoomValueNumber - zoomStep) / 100;
+    changeScalePicture(zoomValueNumber);
   }
 };
 
-var pictureScaleIncrease = document.querySelector('.upload-resize-controls-button-inc');
 pictureScaleIncrease.addEventListener('click', zoom);
-
-var pictureScaleDecrease = document.querySelector('.upload-resize-controls-button-dec');
 pictureScaleDecrease.addEventListener('click', unzoom);
