@@ -170,6 +170,8 @@ var uploadFormClose = document.querySelector('.upload-form-cancel');
 var uploadEffectControls = document.querySelector('.upload-effect-controls');
 var pictureScaleIncrease = document.querySelector('.upload-resize-controls-button-inc');
 var pictureScaleDecrease = document.querySelector('.upload-resize-controls-button-dec');
+var uploadHashtags = document.querySelector('.upload-form-hashtags');
+var uploadForm = document.querySelector('.upload-form');
 var currentEffectName;
 var zoomStep = 25;
 var maxZoom = 100;
@@ -278,3 +280,72 @@ var unzoom = function () {
 
 pictureScaleIncrease.addEventListener('click', zoom);
 pictureScaleDecrease.addEventListener('click', unzoom);
+
+/**
+  * Проходится по массиву и сравнивает содержимое
+  * на наличие дубликатов, возвращает true если находит дубликат
+  *
+  * @param {array} arr массив хештегов введенных пользователем
+  * @return {boolean} true
+*/
+var compareHashtags= function (arr) {
+
+  for (var i = 0; i < arr.length; i++){
+    var temp = arr[i];
+
+    for(var j = i + 1; j < arr.length; j++){
+      var temp1 = arr[j];
+
+      if (temp === temp1) {
+        return true;
+      }
+    }
+  }
+};
+
+/**
+  * Осуществляет проверку на валидность введенных хештегов пользователем
+  *
+  * @param {String} params строка состоящая из введенных пользователем хештегов
+  * @return {boolean} formValid
+*/
+var validateHashtagForm = function (params) {
+  var formValid = true;
+  var splittedFormHashtags = params.split(' ');
+
+  if (compareHashtags(splittedFormHashtags)) {
+    return false;
+  }
+
+  if (!params) {
+    return true;
+  }
+
+  if (splittedFormHashtags.length > 5) {
+    return false;
+  }
+
+  var hashtagsItem;
+
+  for (var i = 0; i < splittedFormHashtags.length; i++) {
+
+    hashtagsItem = splittedFormHashtags[i].toLowerCase();
+
+    if (hashtagsItem[0] !== '#') {
+      formValid = false;
+    }
+
+    if (hashtagsItem.length > 19) {
+      formValid = false;
+    }
+  }
+  return formValid;
+};
+
+uploadForm.addEventListener('submit', function(evt) {
+  var formHashtagsValue = uploadHashtags.value;
+  if (!validateHashtagForm(formHashtagsValue)) {
+    evt.preventDefault();
+    uploadHashtags.style.border = "2px solid red";
+  }
+});
