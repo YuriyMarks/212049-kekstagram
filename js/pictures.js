@@ -291,10 +291,10 @@ pictureScaleDecrease.addEventListener('click', unzoom);
 var compareHashtags= function (arr) {
 
   for (var i = 0; i < arr.length; i++){
-    var temp = arr[i];
+    var temp = arr[i].toLowerCase();
 
     for(var j = i + 1; j < arr.length; j++){
-      var temp1 = arr[j];
+      var temp1 = arr[j].toLowerCase();
 
       if (temp === temp1) {
         return true;
@@ -329,7 +329,7 @@ var validateHashtagForm = function (params) {
 
   for (var i = 0; i < splittedFormHashtags.length; i++) {
 
-    hashtagsItem = splittedFormHashtags[i].toLowerCase();
+    hashtagsItem = splittedFormHashtags[i];
 
     if (hashtagsItem[0] !== '#') {
       formValid = false;
