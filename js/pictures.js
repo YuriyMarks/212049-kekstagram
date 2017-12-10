@@ -84,7 +84,7 @@ var createPhotoElement = function (arr) {
   * @param {array} fragment массив фотографий photosDescription
 */
 var createPhotosList = function (fragment) {
-  var pictures =  document.querySelector('.pictures');
+  var pictures = document.querySelector('.pictures');
 
   pictureTemplateList.appendChild(fragment);
   pictures.classList.remove('hidden');
@@ -140,19 +140,23 @@ var closeGalleryOverlay = function () {
 /**
   * При фокусировке на обьекте .gallery-overlay-close и нажатии клавиши
   * enter скрывает картинку .gallery-overlay
+  *
+  * @param {object} evt обьект .gallery-overlay-close
 */
 var onGalleryOverlayEnterPress = function (evt) {
-  if (evt.keyCode === ENTER_KEYCODE){
-      closeGalleryOverlay();
+  if (evt.keyCode === ENTER_KEYCODE) {
+    closeGalleryOverlay();
   }
 };
 
 /**
   * При нажатии клавиши esc скрывает картинку .gallery-overlay
+  *
+  * @param {object} evt обьект .gallery-overlay-close
 */
 var onGalleryOverlayEscPress = function (evt) {
-  if (evt.keyCode === ESC_KEYCODE){
-    if (document.activeElement != formDescription) {
+  if (evt.keyCode === ESC_KEYCODE) {
+    if (document.activeElement !== formDescription) {
       closeGalleryOverlay();
     }
   }
@@ -163,7 +167,7 @@ addEventHandler();
 // Показ/скрытие формы кадрирования
 
 var formDescription = document.querySelector('.upload-form-description');
-var uploadForm = document.querySelector('#upload-file');
+var uploadFile = document.querySelector('#upload-file');
 var uploadOverlay = document.querySelector('.upload-overlay');
 var previewImage = uploadOverlay.querySelector('.effect-image-preview');
 var uploadFormClose = document.querySelector('.upload-form-cancel');
@@ -185,7 +189,7 @@ var openUploadOverlay = function () {
   uploadOverlay.classList.remove('hidden');
   uploadFormClose.addEventListener('click', closeUploadOverlay);
   document.addEventListener('keydown', onUploadOverlayEscPress);
-}
+};
 
 /**
   * При клике скрывает форму кадрирования (элемент .upload-overlay)
@@ -198,16 +202,18 @@ var closeUploadOverlay = function () {
 
 /**
   * При нажатии клавиши esc скрывает форму кадрирования (элемент .upload-overlay)
+  *
+  * @param {object} evt обьект .document
 */
 var onUploadOverlayEscPress = function (evt) {
-  if (evt.keyCode === ESC_KEYCODE){
-    if (document.activeElement != formDescription) {
+  if (evt.keyCode === ESC_KEYCODE) {
+    if (document.activeElement !== formDescription) {
       closeUploadOverlay(evt);
     }
   }
 };
 
-uploadForm.addEventListener('change', openUploadOverlay);
+uploadFile.addEventListener('change', openUploadOverlay);
 
 /**
   * Добавляет картинке .effect-image-preview CSS-класс, соответствующий фильтру
@@ -235,7 +241,7 @@ uploadEffectControls.addEventListener('click', addFilterToImage);
 */
 var changeScalePicture = function (zoomValueNumber) {
   var styleTransform = document.querySelector('.effect-image-preview');
-  styleTransform.style.transform = 'scale('+zoomValueNumber+')';
+  styleTransform.style.transform = 'scale(' + zoomValueNumber + ')';
 
   changeZoomValue(zoomValueNumber * 100 + '%');
 };
@@ -259,8 +265,8 @@ var zoom = function () {
   var zoomValueNumber = parseInt(zoomValue, 10);
 
   if (zoomValueNumber !== maxZoom) {
-   zoomValueNumber = (zoomValueNumber + zoomStep) / 100;
-   changeScalePicture(zoomValueNumber);
+    zoomValueNumber = (zoomValueNumber + zoomStep) / 100;
+    changeScalePicture(zoomValueNumber);
   }
 };
 
@@ -288,12 +294,12 @@ pictureScaleDecrease.addEventListener('click', unzoom);
   * @param {array} arr массив хештегов введенных пользователем
   * @return {boolean} true
 */
-var compareHashtags= function (arr) {
+var compareHashtags = function (arr) {
 
-  for (var i = 0; i < arr.length; i++){
+  for (var i = 0; i < arr.length; i++) {
     var temp = arr[i].toLowerCase();
 
-    for(var j = i + 1; j < arr.length; j++){
+    for (var j = i + 1; j < arr.length; j++) {
       var temp1 = arr[j].toLowerCase();
 
       if (temp === temp1) {
@@ -301,6 +307,7 @@ var compareHashtags= function (arr) {
       }
     }
   }
+  return false;
 };
 
 /**
@@ -342,10 +349,10 @@ var validateHashtagForm = function (params) {
   return formValid;
 };
 
-uploadForm.addEventListener('submit', function(evt) {
+uploadForm.addEventListener('submit', function (evt) {
   var formHashtagsValue = uploadHashtags.value;
   if (!validateHashtagForm(formHashtagsValue)) {
     evt.preventDefault();
-    uploadHashtags.style.border = "2px solid red";
+    uploadHashtags.style.border = '2px solid red';
   }
 });
