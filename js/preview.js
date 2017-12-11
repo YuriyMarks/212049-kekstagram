@@ -53,9 +53,7 @@
     * @param {object} evt обьект .gallery-overlay-close
   */
   var onGalleryOverlayEnterPress = function (evt) {
-    if (evt.keyCode === ENTER_KEYCODE) {
-      closeGalleryOverlay();
-    }
+    window.util.onEnterPress(evt, closeGalleryOverlay);
   };
 
   /**
@@ -64,11 +62,7 @@
     * @param {object} evt обьект .gallery-overlay-close
   */
   var onGalleryOverlayEscPress = function (evt) {
-    if (evt.keyCode === ESC_KEYCODE) {
-      if (document.activeElement !== formDescription) {
-        closeGalleryOverlay();
-      }
-    }
+    window.util.onEscPress(evt, closeGalleryOverlay);
   };
 
   addEventHandler();

@@ -3,7 +3,6 @@
 // Показ/скрытие формы кадрирования
 
 (function () {
-  var formDescription = document.querySelector('.upload-form-description');
   var uploadFile = document.querySelector('#upload-file');
   var uploadOverlay = document.querySelector('.upload-overlay');
   var previewImage = uploadOverlay.querySelector('.effect-image-preview');
@@ -43,11 +42,7 @@
     * @param {object} evt обьект .document
   */
   var onUploadOverlayEscPress = function (evt) {
-    if (evt.keyCode === ESC_KEYCODE) {
-      if (document.activeElement !== formDescription) {
-        closeUploadOverlay(evt);
-      }
-    }
+    window.util.onEscPress(evt, closeUploadOverlay);
   };
 
   uploadFile.addEventListener('change', openUploadOverlay);
