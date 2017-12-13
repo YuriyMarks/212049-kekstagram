@@ -188,4 +188,48 @@
       uploadHashtags.style.border = '2px solid red';
     }
   });
+
+  // Добавляет движение ползунка и реакцию на движение ползунка
+  // изменением насыщенности текущего выбранного фильтра
+
+  var effectLevelPin = document.querySelector('.upload-effect-level-pin');
+  var effectLevelLine = document.querySelector('.upload-effect-level-line');
+  var effectLevelVal = document.querySelector('.upload-effect-level-val');
+
+  effectLevelPin.addEventListener('mousedown', function(evt) {
+    evt.preventDefault();
+
+    var startCoords = {
+      x: evt.clientX
+    };
+
+    var onMouseMove = function (moveEvt) {
+
+      var shift = {
+        x: startCoords.x - moveEvt.clientX
+      };
+
+      startCoords = {
+        x: moveEvt.clientX
+      };
+
+      var step = (parseInt(shift.x, 10) * 100 / 455);
+      var temp = (parseInt(effectLevelPin.style.left, 10) - step);
+
+      if(temp > 0 && temp < 100){
+        effectLevelPin.style.left = temp + '%';
+        effectLevelVal.style.width =  temp + '%';
+      }
+    };
+
+    var onMouseUp = function (upEvt) {
+      upEvt.preventDefault();
+
+      document.removeEventListener('mousemove', onMouseMove);
+      document.removeEventListener('mouseup', onMouseUp);
+    };
+
+    document.addEventListener('mousemove', onMouseMove);
+    document.addEventListener('mouseup', onMouseUp);
+  });
 })();
