@@ -65,6 +65,7 @@
       currentEffectName = 'effect-' + currentEffectControl;
       previewImage.classList.add(currentEffectName);
       uploadEffectLevel.classList.remove('hidden');
+      previewImage.removeAttribute('style');
 
       if (previewImage.classList.contains('effect-none')) {
         uploadEffectLevel.classList.add('hidden');
