@@ -57,12 +57,18 @@
   var addFilterToImage = function (evt) {
     if (evt.target.tagName === 'INPUT') {
       var currentEffectControl = evt.target.value;
+
       if (previewImage.classList.contains(currentEffectName)) {
         previewImage.classList.remove(currentEffectName);
       }
+
       currentEffectName = 'effect-' + currentEffectControl;
       previewImage.classList.add(currentEffectName);
       uploadEffectLevel.classList.remove('hidden');
+
+      if (previewImage.classList.contains('effect-none')) {
+        uploadEffectLevel.classList.add('hidden');
+      }
     }
   };
 
@@ -206,7 +212,6 @@
     };
 
     var onMouseMove = function (moveEvt) {
-
       var shift = {
         x: startCoords.x - moveEvt.clientX
       };
@@ -221,12 +226,31 @@
       if (temp > 0 && temp < 100) {
         effectLevelPin.style.left = Math.round(temp) + '%';
         effectLevelVal.style.width =  Math.round(temp) + '%';
+      }
 
       if (previewImage.classList.contains('effect-chrome')) {
-        var step = (parseInt(shift.x, 10) * (1 / 455));
-        var temp = previewImage.style.filter - step;
+        temp = (temp / 100).toFixed(2);
         previewImage.style.filter = 'grayscale(' + temp + ')';
       }
+
+      if (previewImage.classList.contains('effect-sepia')) {
+        temp = (temp / 100).toFixed(2);
+        previewImage.style.filter = 'sepia(' + temp + ')';
+      }
+
+      if (previewImage.classList.contains('effect-marvin')) {
+        temp = temp + '%';
+        previewImage.style.filter = 'invert(' + temp + ')';
+      }
+
+      if (previewImage.classList.contains('effect-phobos')) {
+        temp = (temp / 30).toFixed(2) + 'px';
+        previewImage.style.filter = 'blur(' + temp + ')';
+      }
+
+      if (previewImage.classList.contains('effect-heat')) {
+        temp = (temp / 30).toFixed(2);
+        previewImage.style.filter = 'brightness(' + temp + ')';
       }
     };
 
