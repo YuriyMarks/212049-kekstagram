@@ -232,27 +232,27 @@
       }
 
       if (previewImage.classList.contains('effect-chrome')) {
-        temp = (temp / 100).toFixed(2);
+        temp = (temp / 100).toFixed(1);
         previewImage.style.filter = 'grayscale(' + temp + ')';
       }
 
       if (previewImage.classList.contains('effect-sepia')) {
-        temp = (temp / 100).toFixed(2);
+        temp = (temp / 100).toFixed(1);
         previewImage.style.filter = 'sepia(' + temp + ')';
       }
 
       if (previewImage.classList.contains('effect-marvin')) {
-        temp = temp + '%';
+        temp = temp.toFixed(0) + '%';
         previewImage.style.filter = 'invert(' + temp + ')';
       }
 
       if (previewImage.classList.contains('effect-phobos')) {
-        temp = (temp / 30).toFixed(2) + 'px';
+        temp = (temp / 30).toFixed(1) + 'px';
         previewImage.style.filter = 'blur(' + temp + ')';
       }
 
       if (previewImage.classList.contains('effect-heat')) {
-        temp = (temp / 30).toFixed(2);
+        temp = (temp / 30).toFixed(1);
         previewImage.style.filter = 'brightness(' + temp + ')';
       }
     };
