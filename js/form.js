@@ -66,6 +66,8 @@
       previewImage.classList.add(currentEffectName);
       uploadEffectLevel.classList.remove('hidden');
       previewImage.removeAttribute('style');
+      effectLevelPin.style.left = '100%';
+      effectLevelVal.style.width = '100%';
 
       if (previewImage.classList.contains('effect-none')) {
         uploadEffectLevel.classList.add('hidden');
@@ -205,7 +207,7 @@
   var effectLevelPin = document.querySelector('.upload-effect-level-pin');
   var effectLevelVal = document.querySelector('.upload-effect-level-val');
 
-  effectLevelPin.addEventListener('mousedown', function(evt) {
+  effectLevelPin.addEventListener('mousedown', function (evt) {
     evt.preventDefault();
 
     var startCoords = {
@@ -224,9 +226,9 @@
       var step = (parseInt(shift.x, 10) * 100 / 455);
       var temp = (parseInt(effectLevelPin.style.left, 10) - step);
 
-      if (temp > 0 && temp < 100) {
+      if (temp >= 0 && temp <= 100) {
         effectLevelPin.style.left = Math.round(temp) + '%';
-        effectLevelVal.style.width =  Math.round(temp) + '%';
+        effectLevelVal.style.width = Math.round(temp) + '%';
       }
 
       if (previewImage.classList.contains('effect-chrome')) {
