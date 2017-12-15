@@ -12,6 +12,7 @@
   var pictureScaleDecrease = document.querySelector('.upload-resize-controls-button-dec');
   var uploadHashtags = document.querySelector('.upload-form-hashtags');
   var uploadForm = document.querySelector('.upload-form');
+  var uploadEffectLevel = document.querySelector('.upload-effect-level');
   var currentEffectName;
   var zoomStep = 25;
   var maxZoom = 100;
@@ -23,6 +24,7 @@
   */
   var openUploadOverlay = function () {
     uploadOverlay.classList.remove('hidden');
+    uploadEffectLevel.classList.add('hidden');
     uploadFormClose.addEventListener('click', closeUploadOverlay);
     document.addEventListener('keydown', onUploadOverlayEscPress);
   };
@@ -55,11 +57,21 @@
   var addFilterToImage = function (evt) {
     if (evt.target.tagName === 'INPUT') {
       var currentEffectControl = evt.target.value;
+
       if (previewImage.classList.contains(currentEffectName)) {
         previewImage.classList.remove(currentEffectName);
       }
+
       currentEffectName = 'effect-' + currentEffectControl;
       previewImage.classList.add(currentEffectName);
+      uploadEffectLevel.classList.remove('hidden');
+      previewImage.removeAttribute('style');
+      effectLevelPin.style.left = '100%';
+      effectLevelVal.style.width = '100%';
+
+      if (previewImage.classList.contains('effect-none')) {
+        uploadEffectLevel.classList.add('hidden');
+      }
     }
   };
 
@@ -187,5 +199,72 @@
       evt.preventDefault();
       uploadHashtags.style.border = '2px solid red';
     }
+  });
+
+  // Добавляет движение ползунка и реакцию на движение ползунка
+  // изменением насыщенности текущего выбранного фильтра
+
+  var effectLevelPin = document.querySelector('.upload-effect-level-pin');
+  var effectLevelVal = document.querySelector('.upload-effect-level-val');
+
+  effectLevelPin.addEventListener('mousedown', function (evt) {
+    evt.preventDefault();
+
+    var startCoords = {
+      x: evt.clientX
+    };
+
+    var onMouseMove = function (moveEvt) {
+      var shift = {
+        x: startCoords.x - moveEvt.clientX
+      };
+
+      startCoords = {
+        x: moveEvt.clientX
+      };
+
+      var step = (parseInt(shift.x, 10) * 100 / 455);
+      var temp = (parseInt(effectLevelPin.style.left, 10) - step);
+
+      if (temp >= 0 && temp <= 100) {
+        effectLevelPin.style.left = Math.round(temp) + '%';
+        effectLevelVal.style.width = Math.round(temp) + '%';
+      }
+
+      if (previewImage.classList.contains('effect-chrome')) {
+        temp = (temp / 100).toFixed(1);
+        previewImage.style.filter = 'grayscale(' + temp + ')';
+      }
+
+      if (previewImage.classList.contains('effect-sepia')) {
+        temp = (temp / 100).toFixed(1);
+        previewImage.style.filter = 'sepia(' + temp + ')';
+      }
+
+      if (previewImage.classList.contains('effect-marvin')) {
+        temp = temp.toFixed(0) + '%';
+        previewImage.style.filter = 'invert(' + temp + ')';
+      }
+
+      if (previewImage.classList.contains('effect-phobos')) {
+        temp = (temp / 30).toFixed(1) + 'px';
+        previewImage.style.filter = 'blur(' + temp + ')';
+      }
+
+      if (previewImage.classList.contains('effect-heat')) {
+        temp = (temp / 30).toFixed(1);
+        previewImage.style.filter = 'brightness(' + temp + ')';
+      }
+    };
+
+    var onMouseUp = function (upEvt) {
+      upEvt.preventDefault();
+
+      document.removeEventListener('mousemove', onMouseMove);
+      document.removeEventListener('mouseup', onMouseUp);
+    };
+
+    document.addEventListener('mousemove', onMouseMove);
+    document.addEventListener('mouseup', onMouseUp);
   });
 })();
