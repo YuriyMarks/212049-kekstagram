@@ -8,15 +8,11 @@
   var previewImage = uploadOverlay.querySelector('.effect-image-preview');
   var uploadFormClose = document.querySelector('.upload-form-cancel');
   var uploadEffectControls = document.querySelector('.upload-effect-controls');
-  var pictureScaleIncrease = document.querySelector('.upload-resize-controls-button-inc');
-  var pictureScaleDecrease = document.querySelector('.upload-resize-controls-button-dec');
   var uploadHashtags = document.querySelector('.upload-form-hashtags');
   var uploadForm = document.querySelector('.upload-form');
   var uploadEffectLevel = document.querySelector('.upload-effect-level');
+  var zoomValue = document.querySelector('.upload-resize-controls-value');
   var currentEffectName;
-  var zoomStep = 25;
-  var maxZoom = 100;
-  var minZoom = 25;
 
   /**
     * При изменении значения поля загрузки фотографии показывает
@@ -83,53 +79,12 @@
     * @param {number} zoomValueNumber значение атрибута value обьекта
     * .upload-resize-controls-value
   */
-  var changeScalePicture = function (zoomValueNumber) {
-    var styleTransform = document.querySelector('.effect-image-preview');
-    styleTransform.style.transform = 'scale(' + zoomValueNumber + ')';
-
-    changeZoomValue(zoomValueNumber * 100 + '%');
+  var adjustScale = function (zoomValueNumber) {
+    previewImage.style.transform = 'scale(' + zoomValueNumber + ')';
+    zoomValue.value = zoomValueNumber * 100 + '%';
   };
 
-  /**
-    * Изменяет значение атрибута value обьекта .upload-resize-controls-value
-    *
-    * @param {number} value значение атрибута value в процентах
-  */
-  var changeZoomValue = function (value) {
-    var atributeValue = document.querySelector('.upload-resize-controls-value');
-    atributeValue.value = value;
-  };
-
-  /**
-    * При нажатии на кнопку масштабирования увеличивает значение
-    * масштаба zoomValueNumber с шагом в 25
-  */
-  var zoom = function () {
-    var zoomValue = document.querySelector('.upload-resize-controls-value').value;
-    var zoomValueNumber = parseInt(zoomValue, 10);
-
-    if (zoomValueNumber !== maxZoom) {
-      zoomValueNumber = (zoomValueNumber + zoomStep) / 100;
-      changeScalePicture(zoomValueNumber);
-    }
-  };
-
-  /**
-    * При нажатии на кнопку масштабирования уменьшает значение
-    * масштаба zoomValueNumber с шагом в 25
-  */
-  var unzoom = function () {
-    var zoomValue = document.querySelector('.upload-resize-controls-value').value;
-    var zoomValueNumber = parseInt(zoomValue, 10);
-
-    if (zoomValueNumber !== minZoom) {
-      zoomValueNumber = (zoomValueNumber - zoomStep) / 100;
-      changeScalePicture(zoomValueNumber);
-    }
-  };
-
-  pictureScaleIncrease.addEventListener('click', zoom);
-  pictureScaleDecrease.addEventListener('click', unzoom);
+  window.initializeScale.adjustScale(zoomValue, adjustScale);
 
   /**
     * Проходится по массиву и сравнивает содержимое
