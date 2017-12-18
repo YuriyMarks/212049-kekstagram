@@ -11,7 +11,7 @@
   var uploadHashtags = document.querySelector('.upload-form-hashtags');
   var uploadForm = document.querySelector('.upload-form');
   var uploadEffectLevel = document.querySelector('.upload-effect-level');
-  var zoomValue = document.querySelector('.upload-resize-controls-value');
+  var scaleElement = document.querySelector('.upload-resize-controls');
   var currentEffectName;
 
   /**
@@ -81,10 +81,10 @@
   */
   var adjustScale = function (zoomValueNumber) {
     previewImage.style.transform = 'scale(' + zoomValueNumber + ')';
-    zoomValue.value = zoomValueNumber * 100 + '%';
+    scaleElement.value = zoomValueNumber * 100 + '%';
   };
 
-  window.initializeScale.adjustScale(zoomValue, adjustScale);
+  window.initializeScale(scaleElement, adjustScale);
 
   /**
     * Проходится по массиву и сравнивает содержимое
