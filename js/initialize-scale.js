@@ -1,39 +1,39 @@
+'use strict';
+
 (function () {
-  var pictureScaleIncrease = document.querySelector('.upload-resize-controls-button-inc');
-  var pictureScaleDecrease = document.querySelector('.upload-resize-controls-button-dec');
   var zoomStep = 25;
   var maxZoom = 100;
   var minZoom = 25;
 
-    /**
-    * При нажатии на кнопку масштабирования увеличивает/уменьшает значение
-    * масштаба zoomValueNumber с шагом в 25
-    */
-    window.initializeScale = function (param, callback) {
-      var temp = param.path[1].querySelector('.upload-resize-controls-value').value;
-      var zoomValueNumber = parseInt(temp, 10);
+  /**
+  * При нажатии на элементы управления увеличивает/уменьшает значение
+  * переданное в качестве параметра с шагом в 25
+  *
+  * @param {object} button элемент управления
+  * @param {number} scaleValue изменяемое значение переданное в качестве параметра
+  * @param {function} callback функция обратного вызова
+  */
+  window.initializeScale = function (button, scaleValue, callback) {
+    var zoomValueNumber = parseInt(scaleValue, 10);
 
-      if (param.target.classList.contains('upload-resize-controls-button-inc')) {
-        if (zoomValueNumber !== maxZoom) {
-          zoomValueNumber = (zoomValueNumber + zoomStep) / 100;
+    if (button.classList.contains('upload-resize-controls-button-inc')) {
+      if (zoomValueNumber !== maxZoom) {
+        zoomValueNumber = (zoomValueNumber + zoomStep);
 
-          if (typeof callback === 'function') {
-            callback(zoomValueNumber);
-          }
+        if (typeof callback === 'function') {
+          callback(zoomValueNumber);
         }
       }
+    }
 
-      if (param.target.classList.contains('upload-resize-controls-button-dec')) {
-        if (zoomValueNumber !== minZoom) {
-          zoomValueNumber = (zoomValueNumber - zoomStep) / 100;
+    if (button.classList.contains('upload-resize-controls-button-dec')) {
+      if (zoomValueNumber !== minZoom) {
+        zoomValueNumber = (zoomValueNumber - zoomStep);
 
-          if (typeof callback === 'function') {
-            callback(zoomValueNumber);
-          }
+        if (typeof callback === 'function') {
+          callback(zoomValueNumber);
         }
       }
-    };
-
-  pictureScaleIncrease.addEventListener('click', window.initializeScale);
-  pictureScaleDecrease.addEventListener('click', window.initializeScale);
+    }
+  };
 })();
