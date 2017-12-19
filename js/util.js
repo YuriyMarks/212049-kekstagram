@@ -10,7 +10,7 @@
       * При нажатии клавиши esc скрывает картинку
       *
       * @param {object} evt обьект
-      * @func {function} action функция обработки события
+      * @param {function} action функция обработки события
     */
     onEscPress: function (evt, action) {
       if (evt.keyCode === ESC_KEYCODE) {
@@ -25,7 +25,7 @@
       * enter скрывает картинку
       *
       * @param {object} evt обьект
-      * @func {function} action функция обработки события
+      * @param {function} action функция обработки события
     */
     onEnterPress: function (evt, action) {
       if (evt.keyCode === ENTER_KEYCODE) {

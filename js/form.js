@@ -8,15 +8,12 @@
   var previewImage = uploadOverlay.querySelector('.effect-image-preview');
   var uploadFormClose = document.querySelector('.upload-form-cancel');
   var uploadEffectControls = document.querySelector('.upload-effect-controls');
-  var pictureScaleIncrease = document.querySelector('.upload-resize-controls-button-inc');
-  var pictureScaleDecrease = document.querySelector('.upload-resize-controls-button-dec');
   var uploadHashtags = document.querySelector('.upload-form-hashtags');
   var uploadForm = document.querySelector('.upload-form');
   var uploadEffectLevel = document.querySelector('.upload-effect-level');
-  var currentEffectName;
-  var zoomStep = 25;
-  var maxZoom = 100;
-  var minZoom = 25;
+  var scaleElement = document.querySelector('.upload-resize-controls-value');
+  var pictureScaleButtons = document.querySelectorAll('.upload-resize-controls-button');
+  var oldEffectName;
 
   /**
     * При изменении значения поля загрузки фотографии показывает
@@ -52,30 +49,29 @@
   /**
     * Добавляет картинке .effect-image-preview CSS-класс, соответствующий фильтру
     *
-    * @param {object} evt обьект .upload-effect-label
+    * @param {String} currentEffectName строка - класс CSS фильтра который накладывается на картинку
   */
-  var addFilterToImage = function (evt) {
-    if (evt.target.tagName === 'INPUT') {
-      var currentEffectControl = evt.target.value;
+  var addFilterToImage = function (currentEffectName) {
+    previewImage.classList.remove(oldEffectName);
+    previewImage.classList.add(currentEffectName);
+    oldEffectName = currentEffectName;
 
-      if (previewImage.classList.contains(currentEffectName)) {
-        previewImage.classList.remove(currentEffectName);
-      }
 
-      currentEffectName = 'effect-' + currentEffectControl;
-      previewImage.classList.add(currentEffectName);
-      uploadEffectLevel.classList.remove('hidden');
-      previewImage.removeAttribute('style');
-      effectLevelPin.style.left = '100%';
-      effectLevelVal.style.width = '100%';
+    uploadEffectLevel.classList.remove('hidden');
+    previewImage.removeAttribute('style');
+    effectLevelPin.style.left = '100%';
+    effectLevelVal.style.width = '100%';
 
-      if (previewImage.classList.contains('effect-none')) {
-        uploadEffectLevel.classList.add('hidden');
-      }
+    if (previewImage.classList.contains('effect-none')) {
+      uploadEffectLevel.classList.add('hidden');
     }
   };
 
-  uploadEffectControls.addEventListener('click', addFilterToImage);
+  uploadEffectControls.addEventListener('click', function (evt) {
+    if (evt.target.tagName === 'INPUT') {
+      window.changeFilter(evt.target.value, addFilterToImage);
+    }
+  });
 
   /**
     * Изменяет масштаб изображения .effect-image-preview
@@ -83,53 +79,17 @@
     * @param {number} zoomValueNumber значение атрибута value обьекта
     * .upload-resize-controls-value
   */
-  var changeScalePicture = function (zoomValueNumber) {
-    var styleTransform = document.querySelector('.effect-image-preview');
-    styleTransform.style.transform = 'scale(' + zoomValueNumber + ')';
-
-    changeZoomValue(zoomValueNumber * 100 + '%');
+  var adjustScale = function (zoomValueNumber) {
+    zoomValueNumber = zoomValueNumber / 100;
+    previewImage.style.transform = 'scale(' + zoomValueNumber + ')';
+    scaleElement.value = zoomValueNumber * 100 + '%';
   };
 
-  /**
-    * Изменяет значение атрибута value обьекта .upload-resize-controls-value
-    *
-    * @param {number} value значение атрибута value в процентах
-  */
-  var changeZoomValue = function (value) {
-    var atributeValue = document.querySelector('.upload-resize-controls-value');
-    atributeValue.value = value;
-  };
-
-  /**
-    * При нажатии на кнопку масштабирования увеличивает значение
-    * масштаба zoomValueNumber с шагом в 25
-  */
-  var zoom = function () {
-    var zoomValue = document.querySelector('.upload-resize-controls-value').value;
-    var zoomValueNumber = parseInt(zoomValue, 10);
-
-    if (zoomValueNumber !== maxZoom) {
-      zoomValueNumber = (zoomValueNumber + zoomStep) / 100;
-      changeScalePicture(zoomValueNumber);
-    }
-  };
-
-  /**
-    * При нажатии на кнопку масштабирования уменьшает значение
-    * масштаба zoomValueNumber с шагом в 25
-  */
-  var unzoom = function () {
-    var zoomValue = document.querySelector('.upload-resize-controls-value').value;
-    var zoomValueNumber = parseInt(zoomValue, 10);
-
-    if (zoomValueNumber !== minZoom) {
-      zoomValueNumber = (zoomValueNumber - zoomStep) / 100;
-      changeScalePicture(zoomValueNumber);
-    }
-  };
-
-  pictureScaleIncrease.addEventListener('click', zoom);
-  pictureScaleDecrease.addEventListener('click', unzoom);
+  for (var i = 0; i < pictureScaleButtons.length; i++) {
+    pictureScaleButtons[i].addEventListener('click', function (evt) {
+      window.initializeScale(evt.currentTarget, scaleElement.value, adjustScale);
+    });
+  }
 
   /**
     * Проходится по массиву и сравнивает содержимое
@@ -140,7 +100,7 @@
   */
   var compareHashtags = function (arr) {
 
-    for (var i = 0; i < arr.length; i++) {
+    for (i = 0; i < arr.length; i++) {
       var temp = arr[i].toLowerCase();
 
       for (var j = i + 1; j < arr.length; j++) {
@@ -178,7 +138,7 @@
 
     var hashtagsItem;
 
-    for (var i = 0; i < splittedFormHashtags.length; i++) {
+    for (i = 0; i < splittedFormHashtags.length; i++) {
 
       hashtagsItem = splittedFormHashtags[i];
 
