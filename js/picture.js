@@ -13,6 +13,7 @@
 
       pictures.appendChild(fragment);
       pictures.classList.remove('hidden');
+      window.preview.addEventHandler(pictures);
     }
   };
 })();
