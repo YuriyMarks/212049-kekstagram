@@ -27,7 +27,6 @@
   };
 
   var errorHandler = function (message) {
-    //alert(message);
     var node = document.createElement('div');
     node.style = 'z-index: 10; margin: 0 auto; padding-top: 25px; text-align: center; background-color: rgba(255, 0, 0, 0.9); border: 2px solid firebrick;';
     node.style.position = 'absolute';
