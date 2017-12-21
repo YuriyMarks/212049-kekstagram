@@ -167,6 +167,10 @@
 
       var loadData = function () {
         uploadOverlay.classList.add('hidden');
+
+        if (!uploadFile.value == '') {
+          uploadFile.value = '';
+        }
       };
 
       var errorHandler = function (message) {
