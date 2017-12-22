@@ -30,7 +30,7 @@
     var node = document.createElement('div');
     node.style = 'z-index: 10; margin: 0 auto; padding-top: 25px; text-align: center; background-color: rgba(255, 0, 0, 0.9); border: 2px solid firebrick;';
     node.style.position = 'absolute';
-    node.style.left = '50%';
+    node.style.left = 'calc(50% - 225px)';
     node.style.top = '100px';
     node.style.width = '450px';
     node.style.height = '50px';
