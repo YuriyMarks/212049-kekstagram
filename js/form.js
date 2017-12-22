@@ -60,11 +60,9 @@
 
 
     uploadEffectLevel.classList.remove('hidden');
-    previewImage.removeAttribute('style');
+    previewImage.style.filter = '';
     effectLevelPin.style.left = '100%';
     effectLevelVal.style.width = '100%';
-    scaleElement.value = '100%';
-
 
     if (previewImage.classList.contains('effect-none')) {
       uploadEffectLevel.classList.add('hidden');
