@@ -26,8 +26,6 @@
     document.addEventListener('keydown', onUploadOverlayEscPress);
   };
 
-
-
   /**
     * При клике скрывает форму кадрирования (элемент .upload-overlay)
   */
@@ -161,14 +159,12 @@
     if (!validateHashtagForm(formHashtagsValue)) {
       evt.preventDefault();
       uploadHashtags.style.border = '2px solid red';
-    }
-
-    else {
+    } else {
 
       var loadData = function () {
         uploadOverlay.classList.add('hidden');
 
-        if (!uploadFile.value == '') {
+        if (!uploadFile.value === '') {
           uploadFile.value = '';
         }
       };

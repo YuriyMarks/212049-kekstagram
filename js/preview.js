@@ -34,7 +34,7 @@
       var picturesArray = document.querySelectorAll('.picture');
 
       for (var i = 0; i < picturesArray.length; i++) {
-       picturesArray[i].addEventListener('click', pictureClickHandler);
+        picturesArray[i].addEventListener('click', pictureClickHandler);
       }
       galeryOverlayClose.addEventListener('click', closeGalleryOverlay);
       galeryOverlayClose.addEventListener('keydown', onGalleryOverlayEnterPress);

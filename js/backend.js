@@ -11,16 +11,14 @@
     xhr.addEventListener('load', function () {
       if (xhr.status === 200) {
         onSuccess(xhr.response);
-      }
-
-      else {
+      } else {
         onError('Неизвестный статус: ' + xhr.status + ' ' + xhr.statusText);
       }
     });
 
     xhr.addEventListener('error', function () {
-        onError('Ошибка соединения');
-      });
+      onError('Ошибка соединения');
+    });
 
     xhr.addEventListener('timeout', function () {
       onError('Запрос не успел выполниться за: ' + xhr.timeout + ' мс');
@@ -33,33 +31,31 @@
   };
 
   window.load = function (onLoad, onError) {
-      var SERVER_URL = 'https://1510.dump.academy/kekstagram/data';
-      var xhr = new XMLHttpRequest();
-      xhr.responseType = 'json';
+    var SERVER_URL = 'https://1510.dump.academy/kekstagram/data';
+    var xhr = new XMLHttpRequest();
+    xhr.responseType = 'json';
 
-      xhr.open('GET', SERVER_URL);
+    xhr.open('GET', SERVER_URL);
 
-      xhr.addEventListener('load', function () {
+    xhr.addEventListener('load', function () {
 
-        if (xhr.status === 200) {
-          onLoad(xhr.response);
-        }
+      if (xhr.status === 200) {
+        onLoad(xhr.response);
+      } else {
+        onError('Неизвестный статус: ' + xhr.status + ' ' + xhr.statusText);
+      }
+    });
 
-        else {
-          onError('Неизвестный статус: ' + xhr.status + ' ' + xhr.statusText);
-        }
-      });
+    xhr.addEventListener('error', function () {
+      onError('Ошибка соединения');
+    });
 
-      xhr.addEventListener('error', function () {
-        onError('Ошибка соединения');
-      });
+    xhr.addEventListener('timeout', function () {
+      onError('Запрос не успел выполниться за: ' + xhr.timeout + ' мс');
+    });
 
-      xhr.addEventListener('timeout', function () {
-        onError('Запрос не успел выполниться за: ' + xhr.timeout + ' мс');
-      });
+    xhr.timeout = 10000;
 
-      xhr.timeout = 10000;
-
-      xhr.send();
-    };
+    xhr.send();
+  };
 })();
