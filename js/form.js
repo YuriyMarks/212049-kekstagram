@@ -58,7 +58,7 @@
 
 
     uploadEffectLevel.classList.remove('hidden');
-    previewImage.removeAttribute('style');
+    previewImage.style.filter = '';
     effectLevelPin.style.left = '100%';
     effectLevelVal.style.width = '100%';
 
@@ -155,9 +155,38 @@
 
   uploadForm.addEventListener('submit', function (evt) {
     var formHashtagsValue = uploadHashtags.value;
+
     if (!validateHashtagForm(formHashtagsValue)) {
       evt.preventDefault();
       uploadHashtags.style.border = '2px solid red';
+    } else {
+
+      var loadData = function () {
+        uploadOverlay.classList.add('hidden');
+
+        if (!uploadFile.value === '') {
+          uploadFile.value = '';
+        }
+      };
+
+      var errorHandler = function (message) {
+        var node = document.createElement('div');
+        node.style = 'z-index: 10; margin: 0 auto; padding-top: 25px; text-align: center; background-color: rgba(255, 0, 0, 0.9); border: 2px solid firebrick;';
+        node.style.position = 'absolute';
+        node.style.left = 'calc(50% - 225px)';
+        node.style.top = '100px';
+        node.style.width = '450px';
+        node.style.height = '50px';
+        node.style.fontSize = '20px';
+        node.style.color = 'black';
+
+        node.textContent = message;
+        document.body.insertAdjacentElement('afterbegin', node);
+      };
+
+      window.save(new FormData(uploadForm), loadData, errorHandler);
+
+      evt.preventDefault();
     }
   });
 

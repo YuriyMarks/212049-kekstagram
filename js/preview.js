@@ -26,19 +26,21 @@
     galeryOverlay.classList.remove('hidden');
   };
 
-  /**
-    * Добавляет обработчик события 'click' на все элементы .picture
-  */
-  var addEventHandler = function () {
-    var pictures = document.querySelectorAll('.picture');
-    for (var i = 0; i < pictures.length; i++) {
-      pictures[i].addEventListener('click', pictureClickHandler);
-    }
-    galeryOverlayClose.addEventListener('click', closeGalleryOverlay);
-    galeryOverlayClose.addEventListener('keydown', onGalleryOverlayEnterPress);
-    document.addEventListener('keydown', onGalleryOverlayEscPress);
-  };
+  window.preview = {
+    /**
+      * Добавляет обработчик события 'click' на все элементы .picture
+    */
+    addEventHandler: function () {
+      var picturesArray = document.querySelectorAll('.picture');
 
+      for (var i = 0; i < picturesArray.length; i++) {
+        picturesArray[i].addEventListener('click', pictureClickHandler);
+      }
+      galeryOverlayClose.addEventListener('click', closeGalleryOverlay);
+      galeryOverlayClose.addEventListener('keydown', onGalleryOverlayEnterPress);
+      document.addEventListener('keydown', onGalleryOverlayEscPress);
+    }
+  };
   /**
     * При клике на элемент .gallery-overlay-close скрывает элемент .gallery-overlay
   */
@@ -64,6 +66,4 @@
   var onGalleryOverlayEscPress = function (evt) {
     window.util.onEscPress(evt, closeGalleryOverlay);
   };
-
-  addEventHandler();
 })();
