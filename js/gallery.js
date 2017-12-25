@@ -23,7 +23,15 @@
 
       fragment.appendChild(pictureTemplateElement);
     }
+    console.log(fragment);
     window.picture.createPhotosList(fragment);
+
+    var filtersArray = document.querySelectorAll('.filters-radio');
+    for (var i = 0; i < filtersArray.length; i++) {
+      filtersArray[i].addEventListener('click', function(evt){
+        window.filter.filterClickHandler(evt, pictures, createGalery);
+      });
+    }
   };
 
   var errorHandler = function (message) {
@@ -40,6 +48,5 @@
     node.textContent = message;
     document.body.insertAdjacentElement('afterbegin', node);
   };
-
   window.load(createGalery, errorHandler);
 })();

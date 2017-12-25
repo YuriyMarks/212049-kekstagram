@@ -30,7 +30,7 @@
     /**
       * Добавляет обработчик события 'click' на все элементы .picture
     */
-    addEventHandler: function () {
+    onPictureClick: function () {
       var picturesArray = document.querySelectorAll('.picture');
 
       for (var i = 0; i < picturesArray.length; i++) {
