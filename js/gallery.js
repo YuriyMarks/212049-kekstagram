@@ -23,7 +23,6 @@
 
       fragment.appendChild(pictureTemplateElement);
     }
-    console.log(fragment);
     window.picture.createPhotosList(fragment);
 
     var filtersArray = document.querySelectorAll('.filters-radio');
