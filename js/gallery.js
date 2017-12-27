@@ -13,6 +13,7 @@
   */
   var createGalery = function (pictures) {
     var fragment = document.createDocumentFragment();
+    window.temp = pictures;
 
     for (var i = 0; i < pictures.length; i++) {
       var pictureTemplateElement = pictureTemplate.cloneNode(true);
@@ -23,15 +24,25 @@
 
       fragment.appendChild(pictureTemplateElement);
     }
+
     window.picture.createPhotosList(fragment);
 
-    var filtersArray = document.querySelectorAll('.filters-radio');
-    for (var i = 0; i < filtersArray.length; i++) {
-      filtersArray[i].addEventListener('click', function(evt){
-        window.filter.filterClickHandler(evt, pictures, createGalery);
-      });
-    }
+    // var filtersArray = document.querySelectorAll('.filters-radio');
+
+    // for (var i = 0; i < filtersArray.length; i++) {
+    //   filtersArray[i].addEventListener('click', function(evt){
+    //     window.filter.filterClickHandler(evt, pictures, createGalery);
+    //   });
+    // }
   };
+
+  var filtersArray = document.querySelectorAll('.filters-radio');
+
+  for (var i = 0; i < filtersArray.length; i++) {
+    filtersArray[i].addEventListener('click', function(evt){
+      window.filter.filterClickHandler(evt, window.temp, createGalery);
+    });
+  }
 
   var errorHandler = function (message) {
     var node = document.createElement('div');
