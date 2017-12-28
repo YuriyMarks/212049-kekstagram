@@ -38,11 +38,14 @@
     }
 
     if (evt.currentTarget.value === 'recommend'){
-
+      picturesCopy = [].slice.call(pictures).sort(function (first, second) {
+      });
     }
 
     if (typeof callback === 'function') {
-      callback(picturesCopy);
+      window.setTimeout(function () {
+        callback(picturesCopy);
+      }, 500);
     }
   };
 
