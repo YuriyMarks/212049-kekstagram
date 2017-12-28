@@ -1,9 +1,9 @@
 'use strict';
 
-// Отрисовка галереи картинок.
-
 (function () {
   var pictureTemplate = document.querySelector('#picture-template').content;
+  var filtersArray = document.querySelectorAll('.filters-radio');
+  var temp;
 
   /**
     * Клонирует обьект из template подставляет значения url и описание
@@ -13,7 +13,7 @@
   */
   var createGalery = function (pictures) {
     var fragment = document.createDocumentFragment();
-    window.temp = pictures;
+    temp = pictures;
 
     for (var i = 0; i < pictures.length; i++) {
       var pictureTemplateElement = pictureTemplate.cloneNode(true);
@@ -24,26 +24,27 @@
 
       fragment.appendChild(pictureTemplateElement);
     }
-
     window.picture.createPhotosList(fragment);
-
-    // var filtersArray = document.querySelectorAll('.filters-radio');
-
-    // for (var i = 0; i < filtersArray.length; i++) {
-    //   filtersArray[i].addEventListener('click', function(evt){
-    //     window.filter.filterClickHandler(evt, pictures, createGalery);
-    //   });
-    // }
   };
 
-  var filtersArray = document.querySelectorAll('.filters-radio');
+  /**
+    * Добавляет обработчик события 'click' на все элементы .filters-radio
+  */
+  var onFilterClick = function () {
+    for (var i = 0; i < filtersArray.length; i++) {
+      filtersArray[i].addEventListener('click', function(evt){
+        window.filter.filterClickHandler(evt, temp, createGalery);
+      });
+    }
+  };
 
-  for (var i = 0; i < filtersArray.length; i++) {
-    filtersArray[i].addEventListener('click', function(evt){
-      window.filter.filterClickHandler(evt, window.temp, createGalery);
-    });
-  }
+  onFilterClick();
 
+  /**
+    * Обработчик ошибок загрузки изображений с сервера
+    *
+    * @param {string} message собщение об ошибке
+  */
   var errorHandler = function (message) {
     var node = document.createElement('div');
     node.style = 'z-index: 10; margin: 0 auto; padding-top: 25px; text-align: center; background-color: rgba(255, 0, 0, 0.9); border: 2px solid firebrick;';
@@ -58,5 +59,6 @@
     node.textContent = message;
     document.body.insertAdjacentElement('afterbegin', node);
   };
+
   window.load(createGalery, errorHandler);
 })();

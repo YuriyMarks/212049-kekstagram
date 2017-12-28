@@ -13,7 +13,7 @@
   * @param {number} scaleValue изменяемое значение переданное в качестве параметра
   * @param {function} callback функция обратного вызова
   */
-  window.initializeScale = function (button, scaleValue, callback) {
+  var initializeScale = function (button, scaleValue, callback) {
     var zoomValueNumber = parseInt(scaleValue, 10);
 
     if (button.classList.contains('upload-resize-controls-button-inc')) {
@@ -36,4 +36,6 @@
       }
     }
   };
+
+  window.initializeScale = initializeScale;
 })();

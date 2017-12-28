@@ -1,7 +1,5 @@
 'use strict';
 
-// Показ/скрытие формы кадрирования
-
 (function () {
   var uploadFile = document.querySelector('#upload-file');
   var uploadOverlay = document.querySelector('.upload-overlay');
@@ -13,7 +11,10 @@
   var uploadEffectLevel = document.querySelector('.upload-effect-level');
   var scaleElement = document.querySelector('.upload-resize-controls-value');
   var pictureScaleButtons = document.querySelectorAll('.upload-resize-controls-button');
+  var effectLevelPin = document.querySelector('.upload-effect-level-pin');
+  var effectLevelVal = document.querySelector('.upload-effect-level-val');
   var oldEffectName;
+  var temp;
 
   /**
     * При изменении значения поля загрузки фотографии показывает
@@ -52,6 +53,7 @@
     * @param {String} currentEffectName строка - класс CSS фильтра который накладывается на картинку
   */
   var addFilterToImage = function (currentEffectName) {
+    temp = currentEffectName;
     previewImage.classList.remove(oldEffectName);
     previewImage.classList.add(currentEffectName);
     oldEffectName = currentEffectName;
@@ -153,7 +155,13 @@
     return formValid;
   };
 
-  uploadForm.addEventListener('submit', function (evt) {
+  /**
+    * Обрабатывает событие нажатия кнопки отправки формы
+    *
+    * @param {object} evt обьект .upload-form
+  */
+  var submitForm = function (evt) {
+
     var formHashtagsValue = uploadHashtags.value;
 
     if (!validateHashtagForm(formHashtagsValue)) {
@@ -164,9 +172,12 @@
       var loadData = function () {
         uploadOverlay.classList.add('hidden');
 
-        if (!uploadFile.value === '') {
+        if (!uploadFile.value == '') {
           uploadFile.value = '';
         }
+        previewImage.classList.remove(temp);
+        previewImage.removeAttribute("style");
+        scaleElement.value = '100%';
       };
 
       var errorHandler = function (message) {
@@ -188,15 +199,17 @@
 
       evt.preventDefault();
     }
-  });
+  };
 
-  // Добавляет движение ползунка и реакцию на движение ползунка
-  // изменением насыщенности текущего выбранного фильтра
+  uploadForm.addEventListener('submit', submitForm);
 
-  var effectLevelPin = document.querySelector('.upload-effect-level-pin');
-  var effectLevelVal = document.querySelector('.upload-effect-level-val');
-
-  effectLevelPin.addEventListener('mousedown', function (evt) {
+  /**
+    * Добавляет движение ползунка и реакцию на движение ползунка изменением
+    * насыщенности текущего выбранного фильтра
+    *
+    * @param {object} evt обьект .upload-effect-level-pin
+  */
+  var handleSlider = function (evt) {
     evt.preventDefault();
 
     var startCoords = {
@@ -255,5 +268,7 @@
 
     document.addEventListener('mousemove', onMouseMove);
     document.addEventListener('mouseup', onMouseUp);
-  });
+  };
+
+  effectLevelPin.addEventListener('mousedown', handleSlider);
 })();
