@@ -37,10 +37,10 @@
     xhr.send(data);
   };
 
-   /**
+  /**
     * Загружает данные с сервера
     *
-    * @param {function} onSuccess функция обратного вызова, для обработки успешной загрузки данных с сервера
+    * @param {function} onLoad функция обратного вызова, для обработки успешной загрузки данных с сервера
     * @param {function} onError функция обратного вызова, для обработки ошибок загрузки данных с сервера
   */
   var load = function (onLoad, onError) {
@@ -72,6 +72,8 @@
     xhr.send();
   };
 
-  window.save = save;
-  window.load = load;
+  window.backend = {
+    save: save,
+    load: load
+  };
 })();

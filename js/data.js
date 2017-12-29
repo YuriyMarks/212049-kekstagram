@@ -17,11 +17,9 @@
   /**
     * Случайный результат сравнения
     *
-    * @param {object} first обьект
-    * @param {object} second обьект
-    * @return {object} возвращает случайный результат сравнения
+    * @return {object} возвращает случайное число из диапазона -0.5 - 0.5
   */
-  var compareRandom = function (first, second) {
+  var compareRandom = function () {
     return Math.random() - 0.5;
   };
 

@@ -33,7 +33,7 @@
   };
 
   window.util = {
-  onEscPress: onEscPress,
-  onEnterPress: onEnterPress
- };
+    onEscPress: onEscPress,
+    onEnterPress: onEnterPress
+  };
 })();

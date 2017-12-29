@@ -12,6 +12,18 @@
   };
 
   /**
+    * Выполняет функцию указанную в первом аргументе, асинхронно,
+    * с задержкой
+    *
+    * @param {function} f функция
+    * @param {number} ms время задержки в миллисекундах
+    *
+  */
+  var debounce = function (f, ms) {
+    setTimeout(f, ms);
+  };
+
+  /**
     * При нажатии на любой из элементов filters-radio сортирует картинки
     *
     * @param {evt} evt обьект .filters-radio
@@ -37,12 +49,12 @@
       picturesCopy = [].slice.call(pictures).sort(window.data.compareRandom);
     }
 
-    if (evt.currentTarget.value === 'recommend'){
+    if (evt.currentTarget.value === 'recommend') {
       picturesCopy = window.picturesFromServer;
     }
 
     if (typeof callback === 'function') {
-      window.setTimeout(function () {
+      debounce(function () {
         callback(picturesCopy);
       }, 500);
     }

@@ -4,7 +4,6 @@
   var pictureTemplate = document.querySelector('#picture-template').content;
   var filtersArray = document.querySelectorAll('.filters-radio');
   var temp;
-  var picturesFromServer = [];
 
   /**
     * Клонирует обьект из template подставляет значения url и описание
@@ -37,7 +36,7 @@
   */
   var onFilterClick = function () {
     for (var i = 0; i < filtersArray.length; i++) {
-      filtersArray[i].addEventListener('click', function(evt){
+      filtersArray[i].addEventListener('click', function (evt) {
         window.filter.filterClickHandler(evt, temp, createGalery);
       });
     }
@@ -65,5 +64,5 @@
     document.body.insertAdjacentElement('afterbegin', node);
   };
 
-  window.load(createGalery, errorHandler);
+  window.backend.load(createGalery, errorHandler);
 })();
