@@ -3,6 +3,8 @@
 (function () {
   var ESC_KEYCODE = 27;
   var ENTER_KEYCODE = 13;
+  var DEBOUNCE_INTERVAL = 500;
+  var lastTimeout = null;
   var formDescription = document.querySelector('.upload-form-description');
 
   /**
@@ -32,8 +34,23 @@
     }
   };
 
+  /**
+    * Выполняет функцию указанную в первом аргументе, асинхронно,
+    * с задержкой
+    *
+    * @param {function} f функция
+  */
+  var debounce = function (f) {
+    if (lastTimeout) {
+      window.clearTimeout(lastTimeout);
+    }
+
+    lastTimeout = window.setTimeout(f, DEBOUNCE_INTERVAL);
+  };
+
   window.util = {
     onEscPress: onEscPress,
-    onEnterPress: onEnterPress
+    onEnterPress: onEnterPress,
+    debounce: debounce
   };
 })();

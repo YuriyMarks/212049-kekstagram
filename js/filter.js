@@ -12,18 +12,6 @@
   };
 
   /**
-    * Выполняет функцию указанную в первом аргументе, асинхронно,
-    * с задержкой
-    *
-    * @param {function} f функция
-    * @param {number} ms время задержки в миллисекундах
-    *
-  */
-  var debounce = function (f, ms) {
-    setTimeout(f, ms);
-  };
-
-  /**
     * При нажатии на любой из элементов filters-radio сортирует картинки
     *
     * @param {evt} evt обьект .filters-radio
@@ -54,9 +42,9 @@
     }
 
     if (typeof callback === 'function') {
-      debounce(function () {
+      window.util.debounce(function () {
         callback(picturesCopy);
-      }, 500);
+      });
     }
   };
 
