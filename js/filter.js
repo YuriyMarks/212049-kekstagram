@@ -38,8 +38,7 @@
     }
 
     if (evt.currentTarget.value === 'recommend'){
-      picturesCopy = [].slice.call(pictures).sort(function (first, second) {
-      });
+      picturesCopy = window.picturesFromServer;
     }
 
     if (typeof callback === 'function') {

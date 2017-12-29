@@ -4,6 +4,7 @@
   var pictureTemplate = document.querySelector('#picture-template').content;
   var filtersArray = document.querySelectorAll('.filters-radio');
   var temp;
+  var picturesFromServer = [];
 
   /**
     * Клонирует обьект из template подставляет значения url и описание
@@ -14,6 +15,10 @@
   var createGalery = function (pictures) {
     var fragment = document.createDocumentFragment();
     temp = pictures;
+
+    if (!window.picturesFromServer) {
+      window.picturesFromServer = pictures;
+    }
 
     for (var i = 0; i < pictures.length; i++) {
       var pictureTemplateElement = pictureTemplate.cloneNode(true);
