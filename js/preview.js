@@ -1,7 +1,5 @@
 'use strict';
 
-// Показ/скрытие картинки в галерее.
-
 (function () {
   var galeryOverlay = document.querySelector('.gallery-overlay');
   var galeryOverlayClose = document.querySelector('.gallery-overlay-close');
@@ -26,21 +24,20 @@
     galeryOverlay.classList.remove('hidden');
   };
 
-  window.preview = {
-    /**
-      * Добавляет обработчик события 'click' на все элементы .picture
-    */
-    addEventHandler: function () {
-      var picturesArray = document.querySelectorAll('.picture');
+  /**
+    * Добавляет обработчик события 'click' на все элементы .picture
+  */
+  var onPictureClick = function () {
+    var picturesArray = document.querySelectorAll('.picture');
 
-      for (var i = 0; i < picturesArray.length; i++) {
-        picturesArray[i].addEventListener('click', pictureClickHandler);
-      }
-      galeryOverlayClose.addEventListener('click', closeGalleryOverlay);
-      galeryOverlayClose.addEventListener('keydown', onGalleryOverlayEnterPress);
-      document.addEventListener('keydown', onGalleryOverlayEscPress);
+    for (var i = 0; i < picturesArray.length; i++) {
+      picturesArray[i].addEventListener('click', pictureClickHandler);
     }
+    galeryOverlayClose.addEventListener('click', closeGalleryOverlay);
+    galeryOverlayClose.addEventListener('keydown', onGalleryOverlayEnterPress);
+    document.addEventListener('keydown', onGalleryOverlayEscPress);
   };
+
   /**
     * При клике на элемент .gallery-overlay-close скрывает элемент .gallery-overlay
   */
@@ -65,5 +62,9 @@
   */
   var onGalleryOverlayEscPress = function (evt) {
     window.util.onEscPress(evt, closeGalleryOverlay);
+  };
+
+  window.preview = {
+    onPictureClick: onPictureClick
   };
 })();
