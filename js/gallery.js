@@ -13,13 +13,15 @@
   */
   var createGalery = function (pictures) {
     var fragment = document.createDocumentFragment();
+    var galleryOverlayControlsComments = document.querySelector('.gallery-overlay-controls-comments');
 
     for (var i = 0; i < pictures.length; i++) {
       var pictureTemplateElement = pictureTemplate.cloneNode(true);
-
+console.log(pictures);
       pictureTemplateElement.querySelector('.picture img').src = pictures[i].url;
       pictureTemplateElement.querySelector('.picture-likes').textContent = pictures[i].likes;
       pictureTemplateElement.querySelector('.picture-comments').textContent = pictures[i].comments[window.data.calcRandomNum(0, pictures[i].comments.length - 1)];
+      galleryOverlayControlsComments.textContent = pictures[i].comments.length;
 
       fragment.appendChild(pictureTemplateElement);
     }
