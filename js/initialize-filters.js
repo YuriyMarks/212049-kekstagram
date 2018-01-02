@@ -8,11 +8,13 @@
     * @param {String} currentEffectControl изменяемый параметр
     * @param {function} callback функция обратного вызова
   */
-  window.changeFilter = function (currentEffectControl, callback) {
+  var changeFilter = function (currentEffectControl, callback) {
     var currentEffectName = 'effect-' + currentEffectControl;
 
     if (typeof callback === 'function') {
       callback(currentEffectName);
     }
   };
+
+  window.changeFilter = changeFilter;
 })();
