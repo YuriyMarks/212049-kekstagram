@@ -48,9 +48,34 @@
     lastTimeout = window.setTimeout(f, DEBOUNCE_INTERVAL);
   };
 
+   /**
+    * В случае успешной отправки\приема данных с сервера вызывает функцию обратного вызова,
+    * в случае неуспешной отправки\приема данных выводит ошибку на экран пользователя
+    *
+    * @param {object} obj обьект
+    * @param {function} onSuccess функция обратного вызова
+    * @param {function} onError функция обратного вызова
+  */
+  var transferDataHandler = function (obj, onSuccess, onError) {
+    obj.addEventListener('load', function () {
+      obj.status === 200 ? onSuccess(obj.response): onError('Неизвестный статус: ' + obj.status + ' ' + obj.statusText);
+    });
+
+    obj.addEventListener('error', function () {
+      onError('Ошибка соединения');
+    });
+
+    obj.addEventListener('timeout', function () {
+      onError('Запрос не успел выполниться за: ' + obj.timeout + ' мс ');
+    });
+
+    obj.timeout = 10000;
+  };
+
   window.util = {
     onEscPress: onEscPress,
     onEnterPress: onEnterPress,
-    debounce: debounce
+    debounce: debounce,
+    transferDataHandler: transferDataHandler
   };
 })();

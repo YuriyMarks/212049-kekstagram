@@ -15,23 +15,7 @@
     var xhr = new XMLHttpRequest();
     xhr.responseType = 'json';
 
-    xhr.addEventListener('load', function () {
-      if (xhr.status === 200) {
-        onSuccess(xhr.response);
-      } else {
-        onError('Неизвестный статус: ' + xhr.status + ' ' + xhr.statusText);
-      }
-    });
-
-    xhr.addEventListener('error', function () {
-      onError('Ошибка соединения');
-    });
-
-    xhr.addEventListener('timeout', function () {
-      onError('Запрос не успел выполниться за: ' + xhr.timeout + ' мс ');
-    });
-
-    xhr.timeout = 10000;
+    window.util.transferDataHandler(xhr, onSuccess, onError);
 
     xhr.open('POST', SERVER_URL);
     xhr.send(data);
@@ -50,24 +34,7 @@
 
     xhr.open('GET', SERVER_URL);
 
-    xhr.addEventListener('load', function () {
-
-      if (xhr.status === 200) {
-        onLoad(xhr.response);
-      } else {
-        onError('Неизвестный статус: ' + xhr.status + ' ' + xhr.statusText);
-      }
-    });
-
-    xhr.addEventListener('error', function () {
-      onError('Ошибка соединения');
-    });
-
-    xhr.addEventListener('timeout', function () {
-      onError('Запрос не успел выполниться за: ' + xhr.timeout + ' мс');
-    });
-
-    xhr.timeout = 10000;
+    window.util.transferDataHandler(xhr, onLoad, onError);
 
     xhr.send();
   };

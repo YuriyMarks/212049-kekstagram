@@ -179,6 +179,7 @@
         previewImage.classList.remove(temp);
         previewImage.style.filter = '';
         previewImage.style.transform = 'scale(1)';
+        uploadHashtags.style.border = 'none';
       };
 
       var errorHandler = function (message) {

@@ -13,23 +13,19 @@
   */
   var createGalery = function (pictures) {
     var fragment = document.createDocumentFragment();
-<<<<<<< HEAD
-    var galleryOverlayControlsComments = document.querySelector('.gallery-overlay-controls-comments');
-=======
     temp = pictures;
 
     if (!window.picturesFromServer) {
       window.picturesFromServer = pictures;
     }
->>>>>>> 15e95bf12ad9927f0efa7c12037603c2c6aa6a9e
 
     for (var i = 0; i < pictures.length; i++) {
       var pictureTemplateElement = pictureTemplate.cloneNode(true);
-console.log(pictures);
+
       pictureTemplateElement.querySelector('.picture img').src = pictures[i].url;
       pictureTemplateElement.querySelector('.picture-likes').textContent = pictures[i].likes;
-      pictureTemplateElement.querySelector('.picture-comments').textContent = pictures[i].comments[window.data.calcRandomNum(0, pictures[i].comments.length - 1)];
-      galleryOverlayControlsComments.textContent = pictures[i].comments.length;
+      pictureTemplateElement.querySelector('.picture-comments').textContent = pictures[i].comments.length;
+      //pictures[i].comments[window.data.calcRandomNum(0, pictures[i].comments.length - 1)] + ' ' +
 
       fragment.appendChild(pictureTemplateElement);
     }

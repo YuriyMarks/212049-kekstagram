@@ -14,13 +14,16 @@
     evt.preventDefault();
 
     var temp = evt.currentTarget;
+
     var galeryOverlayImage = document.querySelector('.gallery-overlay-image');
     var likesCount = document.querySelector('.likes-count');
     var commentsCount = document.querySelector('.comments-count');
+    var galleryOverlayControlsComments = document.querySelector('.gallery-overlay-controls-comments');
 
     galeryOverlayImage.src = temp.querySelector('img').src;
     likesCount.textContent = temp.querySelector('.picture-likes').textContent;
     commentsCount.textContent = temp.querySelector('.picture-comments').textContent;
+//galleryOverlayControlsComments.textContent = 'Free text ' + 'комментариев '+ temp.querySelector('.picture-comments').textContent;
     galeryOverlay.classList.remove('hidden');
   };
 
