@@ -14,7 +14,6 @@
   var effectLevelPin = document.querySelector('.upload-effect-level-pin');
   var effectLevelVal = document.querySelector('.upload-effect-level-val');
   var oldEffectName;
-  var temp;
 
   /**
     * При изменении значения поля загрузки фотографии показывает
@@ -24,7 +23,7 @@
     uploadOverlay.classList.remove('hidden');
     uploadEffectLevel.classList.add('hidden');
     uploadFormClose.addEventListener('click', closeUploadOverlay);
-    document.addEventListener('keydown', onUploadOverlayEscPress);
+    document.addEventListener('keydown', pressEscOnUploadOverlay);
   };
 
   /**
@@ -33,7 +32,7 @@
   var closeUploadOverlay = function () {
     uploadOverlay.classList.add('hidden');
     uploadFormClose.removeEventListener('click', closeUploadOverlay);
-    document.removeEventListener('keydown', onUploadOverlayEscPress);
+    document.removeEventListener('keydown', pressEscOnUploadOverlay);
   };
 
   /**
@@ -41,8 +40,8 @@
     *
     * @param {object} evt обьект .document
   */
-  var onUploadOverlayEscPress = function (evt) {
-    window.util.onEscPress(evt, closeUploadOverlay);
+  var pressEscOnUploadOverlay = function (evt) {
+    window.util.pressEsc(evt, closeUploadOverlay);
   };
 
   uploadFile.addEventListener('change', openUploadOverlay);
@@ -53,7 +52,7 @@
     * @param {String} currentEffectName строка - класс CSS фильтра который накладывается на картинку
   */
   var addFilterToImage = function (currentEffectName) {
-    temp = currentEffectName;
+    window.temp = currentEffectName;
     previewImage.classList.remove(oldEffectName);
     previewImage.classList.add(currentEffectName);
     oldEffectName = currentEffectName;
@@ -168,7 +167,7 @@
       evt.preventDefault();
       uploadHashtags.style.border = '2px solid red';
     } else {
-
+      uploadHashtags.style.border = '2px solid transparent';
       var loadData = function () {
         uploadOverlay.classList.add('hidden');
 
@@ -176,13 +175,12 @@
           uploadFile.value = '';
         }
         uploadForm.reset();
-        previewImage.classList.remove(temp);
+        previewImage.classList.remove(window.temp);
         previewImage.style.filter = '';
         previewImage.style.transform = 'scale(1)';
-        uploadHashtags.style.border = 'none';
       };
 
-      var errorHandler = function (message) {
+      var handleError = function (message) {
         var node = document.createElement('div');
         node.style = 'z-index: 10; margin: 0 auto; padding-top: 25px; text-align: center; background-color: rgba(255, 0, 0, 0.9); border: 2px solid firebrick;';
         node.style.position = 'absolute';
@@ -197,7 +195,7 @@
         document.body.insertAdjacentElement('afterbegin', node);
       };
 
-      window.backend.save(new FormData(uploadForm), loadData, errorHandler);
+      window.backend.save(new FormData(uploadForm), loadData, handleError);
 
       evt.preventDefault();
     }
@@ -218,7 +216,7 @@
       x: evt.clientX
     };
 
-    var onMouseMove = function (moveEvt) {
+    var moveMouse = function (moveEvt) {
       var shift = {
         x: startCoords.x - moveEvt.clientX
       };
@@ -261,15 +259,15 @@
       }
     };
 
-    var onMouseUp = function (upEvt) {
+    var upMouse = function (upEvt) {
       upEvt.preventDefault();
 
-      document.removeEventListener('mousemove', onMouseMove);
-      document.removeEventListener('mouseup', onMouseUp);
+      document.removeEventListener('mousemove', moveMouse);
+      document.removeEventListener('mouseup', upMouse);
     };
 
-    document.addEventListener('mousemove', onMouseMove);
-    document.addEventListener('mouseup', onMouseUp);
+    document.addEventListener('mousemove', moveMouse);
+    document.addEventListener('mouseup', upMouse);
   };
 
   effectLevelPin.addEventListener('mousedown', handleSlider);

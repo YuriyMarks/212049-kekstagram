@@ -10,7 +10,7 @@
     *
     * @param {object} evt обьект .picture
   */
-  var pictureClickHandler = function (evt) {
+  var drawGaleryOverlay = function (evt) {
     evt.preventDefault();
 
     var temp = evt.currentTarget;
@@ -18,27 +18,25 @@
     var galeryOverlayImage = document.querySelector('.gallery-overlay-image');
     var likesCount = document.querySelector('.likes-count');
     var commentsCount = document.querySelector('.comments-count');
-    var galleryOverlayControlsComments = document.querySelector('.gallery-overlay-controls-comments');
 
     galeryOverlayImage.src = temp.querySelector('img').src;
     likesCount.textContent = temp.querySelector('.picture-likes').textContent;
     commentsCount.textContent = temp.querySelector('.picture-comments').textContent;
-//galleryOverlayControlsComments.textContent = 'Free text ' + 'комментариев '+ temp.querySelector('.picture-comments').textContent;
     galeryOverlay.classList.remove('hidden');
   };
 
   /**
     * Добавляет обработчик события 'click' на все элементы .picture
   */
-  var onPictureClick = function () {
+  var addOnPictureClickHandler = function () {
     var picturesArray = document.querySelectorAll('.picture');
 
     for (var i = 0; i < picturesArray.length; i++) {
-      picturesArray[i].addEventListener('click', pictureClickHandler);
+      picturesArray[i].addEventListener('click', drawGaleryOverlay);
     }
     galeryOverlayClose.addEventListener('click', closeGalleryOverlay);
-    galeryOverlayClose.addEventListener('keydown', onGalleryOverlayEnterPress);
-    document.addEventListener('keydown', onGalleryOverlayEscPress);
+    galeryOverlayClose.addEventListener('keydown', pressEnterOnGalleryOverlay);
+    document.addEventListener('keydown', pressEscOnGalleryOverlay);
   };
 
   /**
@@ -54,8 +52,8 @@
     *
     * @param {object} evt обьект .gallery-overlay-close
   */
-  var onGalleryOverlayEnterPress = function (evt) {
-    window.util.onEnterPress(evt, closeGalleryOverlay);
+  var pressEnterOnGalleryOverlay = function (evt) {
+    window.util.pressEnter(evt, closeGalleryOverlay);
   };
 
   /**
@@ -63,11 +61,11 @@
     *
     * @param {object} evt обьект .gallery-overlay-close
   */
-  var onGalleryOverlayEscPress = function (evt) {
-    window.util.onEscPress(evt, closeGalleryOverlay);
+  var pressEscOnGalleryOverlay = function (evt) {
+    window.util.pressEsc(evt, closeGalleryOverlay);
   };
 
   window.preview = {
-    onPictureClick: onPictureClick
+    addOnPictureClickHandler: addOnPictureClickHandler
   };
 })();

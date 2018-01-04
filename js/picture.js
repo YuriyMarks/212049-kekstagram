@@ -17,7 +17,7 @@
     pictures.classList.remove('hidden');
     window.filter.showFilter();
 
-    window.preview.onPictureClick();
+    window.preview.addOnPictureClickHandler();
   };
 
   window.picture = {

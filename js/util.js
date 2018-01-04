@@ -4,6 +4,7 @@
   var ESC_KEYCODE = 27;
   var ENTER_KEYCODE = 13;
   var DEBOUNCE_INTERVAL = 500;
+  var STATUS_OK = 200;
   var lastTimeout = null;
   var formDescription = document.querySelector('.upload-form-description');
 
@@ -13,7 +14,7 @@
     * @param {object} evt обьект
     * @param {function} action функция обработки события
   */
-  var onEscPress = function (evt, action) {
+  var pressEsc = function (evt, action) {
     if (evt.keyCode === ESC_KEYCODE) {
       if (document.activeElement !== formDescription) {
         action();
@@ -28,7 +29,7 @@
     * @param {object} evt обьект
     * @param {function} action функция обработки события
   */
-  var onEnterPress = function (evt, action) {
+  var pressEnter = function (evt, action) {
     if (evt.keyCode === ENTER_KEYCODE) {
       action();
     }
@@ -48,7 +49,7 @@
     lastTimeout = window.setTimeout(f, DEBOUNCE_INTERVAL);
   };
 
-   /**
+  /**
     * В случае успешной отправки\приема данных с сервера вызывает функцию обратного вызова,
     * в случае неуспешной отправки\приема данных выводит ошибку на экран пользователя
     *
@@ -56,9 +57,9 @@
     * @param {function} onSuccess функция обратного вызова
     * @param {function} onError функция обратного вызова
   */
-  var transferDataHandler = function (obj, onSuccess, onError) {
+  var handleTransferData = function (obj, onSuccess, onError) {
     obj.addEventListener('load', function () {
-      obj.status === 200 ? onSuccess(obj.response): onError('Неизвестный статус: ' + obj.status + ' ' + obj.statusText);
+      obj.status === STATUS_OK ? onSuccess(obj.response) : onError('Неизвестный статус: ' + obj.status + ' ' + obj.statusText);
     });
 
     obj.addEventListener('error', function () {
@@ -73,9 +74,9 @@
   };
 
   window.util = {
-    onEscPress: onEscPress,
-    onEnterPress: onEnterPress,
+    pressEsc: pressEsc,
+    pressEnter: pressEnter,
     debounce: debounce,
-    transferDataHandler: transferDataHandler
+    handleTransferData: handleTransferData
   };
 })();

@@ -15,7 +15,7 @@
     var xhr = new XMLHttpRequest();
     xhr.responseType = 'json';
 
-    window.util.transferDataHandler(xhr, onSuccess, onError);
+    window.util.handleTransferData(xhr, onSuccess, onError);
 
     xhr.open('POST', SERVER_URL);
     xhr.send(data);
@@ -34,7 +34,7 @@
 
     xhr.open('GET', SERVER_URL);
 
-    window.util.transferDataHandler(xhr, onLoad, onError);
+    window.util.handleTransferData(xhr, onLoad, onError);
 
     xhr.send();
   };

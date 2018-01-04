@@ -18,7 +18,7 @@
     * @param {array} pictures массив картинок
     * @param {function} callback функция обратного вызова
   */
-  var filterClickHandler = function (evt, pictures, callback) {
+  var sortPicturesInGalery = function (evt, pictures, callback) {
     var picturesCopy = [];
 
     if (evt.currentTarget.value === 'popular') {
@@ -34,7 +34,7 @@
     }
 
     if (evt.currentTarget.value === 'random') {
-      picturesCopy = [].slice.call(pictures).sort(window.data.compareRandom);
+      picturesCopy = [].slice.call(pictures).sort(window.data.generateRandomNum);
     }
 
     if (evt.currentTarget.value === 'recommend') {
@@ -50,6 +50,6 @@
 
   window.filter = {
     showFilter: showFilter,
-    filterClickHandler: filterClickHandler
+    sortPicturesInGalery: sortPicturesInGalery
   };
 })();

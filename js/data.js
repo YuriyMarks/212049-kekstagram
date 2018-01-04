@@ -3,7 +3,7 @@
 (function () {
 
   /**
-    * Вычисляет случайное целое число из диапазона
+    * Генерирует случайное целое число из диапазона заданного параметрами min, max
     *
     * @param {number} min минимальное число из диапазона
     * @param {number} max максимальное число из диапазона
@@ -15,16 +15,16 @@
   };
 
   /**
-    * Случайный результат сравнения
+    * Генерирует случайное число из диапазона -0.5 - 0.5
     *
     * @return {object} возвращает случайное число из диапазона -0.5 - 0.5
   */
-  var compareRandom = function () {
+  var generateRandomNum = function () {
     return Math.random() - 0.5;
   };
 
   window.data = {
     calcRandomNum: calcRandomNum,
-    compareRandom: compareRandom
+    generateRandomNum: generateRandomNum
   };
 })();

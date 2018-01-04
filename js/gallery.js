@@ -25,7 +25,6 @@
       pictureTemplateElement.querySelector('.picture img').src = pictures[i].url;
       pictureTemplateElement.querySelector('.picture-likes').textContent = pictures[i].likes;
       pictureTemplateElement.querySelector('.picture-comments').textContent = pictures[i].comments.length;
-      //pictures[i].comments[window.data.calcRandomNum(0, pictures[i].comments.length - 1)] + ' ' +
 
       fragment.appendChild(pictureTemplateElement);
     }
@@ -35,15 +34,15 @@
   /**
     * Добавляет обработчик события 'click' на все элементы .filters-radio
   */
-  var onFilterClick = function () {
+  var clickOnFilter = function () {
     for (var i = 0; i < filtersArray.length; i++) {
       filtersArray[i].addEventListener('click', function (evt) {
-        window.filter.filterClickHandler(evt, temp, createGalery);
+        window.filter.sortPicturesInGalery(evt, temp, createGalery);
       });
     }
   };
 
-  onFilterClick();
+  clickOnFilter();
 
   /**
     * Обработчик ошибок загрузки изображений с сервера
@@ -63,6 +62,10 @@
 
     node.textContent = message;
     document.body.insertAdjacentElement('afterbegin', node);
+    setTimeout(function () {
+      node.style = '';
+      node.textContent = '';
+    }, 5000);
   };
 
   window.backend.load(createGalery, errorHandler);
