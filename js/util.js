@@ -59,7 +59,8 @@
   */
   var handleTransferData = function (obj, onSuccess, onError) {
     obj.addEventListener('load', function () {
-      obj.status === STATUS_OK ? onSuccess(obj.response) : onError('Неизвестный статус: ' + obj.status + ' ' + obj.statusText);
+      var objStatus = obj.status === STATUS_OK ? onSuccess(obj.response) : onError('Неизвестный статус: ' + obj.status + ' ' + obj.statusText);
+      return objStatus;
     });
 
     obj.addEventListener('error', function () {
