@@ -227,35 +227,27 @@
 
       var step = (parseInt(shift.x, 10) * 100 / 455);
       var tempStyleLeft = (parseInt(effectLevelPin.style.left, 10) - step);
+      var filtersClass = previewImage.classList;
+      var tempStyleLeft1 = (tempStyleLeft / 100).toFixed(1);
+      var tempStyleLeft3 = (tempStyleLeft / 30).toFixed(1);
+      var tempStyleLeft100 = tempStyleLeft.toFixed(0) + '%';
 
       if (tempStyleLeft >= 0 && tempStyleLeft <= 100) {
         effectLevelPin.style.left = Math.round(tempStyleLeft) + '%';
         effectLevelVal.style.width = Math.round(tempStyleLeft) + '%';
       }
 
-      if (previewImage.classList.contains('effect-chrome')) {
-        tempStyleLeft = (tempStyleLeft / 100).toFixed(1);
-        previewImage.style.filter = 'grayscale(' + tempStyleLeft + ')';
-      }
-
-      if (previewImage.classList.contains('effect-sepia')) {
-        tempStyleLeft = (tempStyleLeft / 100).toFixed(1);
-        previewImage.style.filter = 'sepia(' + tempStyleLeft + ')';
-      }
-
-      if (previewImage.classList.contains('effect-marvin')) {
-        tempStyleLeft = tempStyleLeft.toFixed(0) + '%';
-        previewImage.style.filter = 'invert(' + tempStyleLeft + ')';
-      }
-
-      if (previewImage.classList.contains('effect-phobos')) {
-        tempStyleLeft = (tempStyleLeft / 30).toFixed(1) + 'px';
-        previewImage.style.filter = 'blur(' + tempStyleLeft + ')';
-      }
-
-      if (previewImage.classList.contains('effect-heat')) {
-        tempStyleLeft = (tempStyleLeft / 30).toFixed(1);
-        previewImage.style.filter = 'brightness(' + tempStyleLeft + ')';
+      switch (filtersClass[1]) {
+        case 'effect-chrome': previewImage.style.filter = 'grayscale(' + tempStyleLeft1 + ')';
+          break;
+        case 'effect-sepia': previewImage.style.filter = 'sepia(' + tempStyleLeft1 + ')';
+          break;
+        case 'effect-marvin': previewImage.style.filter = 'invert(' + tempStyleLeft100 + ')';
+          break;
+        case 'effect-phobos': previewImage.style.filter = 'blur(' + tempStyleLeft3 + 'px' + ')';
+          break;
+        case 'effect-heat': previewImage.style.filter = 'brightness(' + tempStyleLeft3 + ')';
+          break;
       }
     };
 
