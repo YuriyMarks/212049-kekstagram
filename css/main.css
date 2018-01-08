@@ -122,7 +122,6 @@ body {
 }
 
 .upload-effect-preview {
-  background-image: url("../img/upload-default-image.jpg");
   background-repeat: no-repeat;
   background-position: center;
 }
