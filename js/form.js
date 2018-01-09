@@ -227,9 +227,9 @@
 
       var step = (parseInt(shift.x, 10) * 100 / 455);
       var tempStyleLeft = (parseInt(effectLevelPin.style.left, 10) - step);
-      // var tempStyleLeft1 = (tempStyleLeft / 100).toFixed(1);
-      // var tempStyleLeft3 = (tempStyleLeft / 30).toFixed(1);
-      // var tempStyleLeft100 = tempStyleLeft.toFixed(0) + '%';
+      var tempStyleLeft1 = (tempStyleLeft / 100).toFixed(1);
+      var tempStyleLeft3 = (tempStyleLeft / 30).toFixed(1);
+      var tempStyleLeft100 = tempStyleLeft.toFixed(0) + '%';
       var currentFilter = previewImage.classList;
 
       if (tempStyleLeft >= 0 && tempStyleLeft <= 100) {
@@ -238,11 +238,11 @@
       }
 
       var filter = {
-        'effect-chrome': 'grayscale(' + (tempStyleLeft / 100).toFixed(1) + ')',
-        'effect-sepia': 'sepia(' + (tempStyleLeft / 100).toFixed(1) + ')',
-        'effect-marvin': 'invert(' + tempStyleLeft.toFixed(0) + '%' + ')',
-        'effect-phobos': 'blur(' + (tempStyleLeft / 30).toFixed(1) + 'px' + ')',
-        'effect-heat': 'brightness(' + (tempStyleLeft / 30).toFixed(1) + ')'
+        'effect-chrome': 'grayscale(' + tempStyleLeft1 + ')',
+        'effect-sepia': 'sepia(' + tempStyleLeft1 + ')',
+        'effect-marvin': 'invert(' + tempStyleLeft100 + '%' + ')',
+        'effect-phobos': 'blur(' + tempStyleLeft3 + 'px' + ')',
+        'effect-heat': 'brightness(' + tempStyleLeft3 + ')'
       };
 
       var levelFilter = filter[currentFilter[1]];
